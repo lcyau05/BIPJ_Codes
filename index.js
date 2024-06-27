@@ -122,6 +122,13 @@ app.get('/testimonial', (req,res) => {
     res.render('testimonial',{layout:'main'})
 });
 
+//ACCOUNT MANAGEMENT:
+app.get('/login', (req,res) => {
+    res.render('ACCOUNTS/login',{
+        layout:'main'
+      });
+    });
+
 let port = 3002
 
 //starting the server on the designated port
