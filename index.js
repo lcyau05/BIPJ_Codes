@@ -129,6 +129,19 @@ app.get('/login', (req,res) => {
       });
     });
 
+app.post('/login', (req,res) => {
+    let errorsList = [];
+    let {email, password} = req.body;
+    if (email.length <= 0)
+         {
+        errorsList.push({text: 'Please Enter Your Email!'});
+        }
+    if (password.length <= 0)
+         {
+        errorsList.push({text: 'Please Enter Your Password!'});
+        }
+});
+
 let port = 3002
 
 //starting the server on the designated port
