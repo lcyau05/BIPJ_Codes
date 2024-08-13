@@ -1,0 +1,132 @@
+<style>
+    h1 {
+        font-size: 2.5em;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 30px;
+    }
+
+    .workshop-card {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .workshop-card:hover {
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .workshop-details h2 {
+        font-size: 1.8em;
+        color: #ff6961;
+        margin: 0 0 10px;
+    }
+
+    .workshop-details p {
+        font-size: 1.1em;
+        color: #555;
+        margin: 5px 0;
+    }
+
+    .workshop-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .workshop-action-button {
+        background-color: #ff6961;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: #fff;
+        text-decoration: none;
+        margin-left: 10px;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .workshop-action-button:hover {
+        background-color: #ff4d44;
+        cursor: pointer;
+    }
+
+    .create-button {
+        display: block;
+        margin: 20px auto;
+        background-color: #FD8087;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .create-button:hover {
+        background-color: #FD8087;
+    }
+
+    a {
+        color: #ff6961;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .participant-count {
+        font-weight: bold;
+        margin-top: 10px;
+        color: #333;
+    }
+</style>
+
+<title>{{category}} Workshops</title>
+
+<body>
+    <div class="container">
+        <h1>{{category}} Workshops</h1>
+
+        {{#if workshops.length}}
+        <ul>
+            {{#each workshops}}
+            <li class="workshop-card">
+                <div class="workshop-details">
+                    <h2>{{workshop_title}}</h2>
+                    <p>Organizer: {{workshop_organizer}}</p>
+                    <p>Venue: {{workshop_venue}}</p>
+                    <p>Date: {{workshop_date}}</p>
+                    <p>Time: {{workshop_start_time}} - {{workshop_end_time}}</p>
+
+                    <!-- Live Participant Count -->
+                    <p class="participant-count">Current Participants: {{participantCount}} /
+                        {{workshop_participants_limit}}</p>
+                    <p>Description: {{workshop_description}}</p>
+                </div>
+                <div class="workshop-actions">
+                    <a href="/register_workshop/{{id}}" class="workshop-action-button">Register Now</a>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+        {{else}}
+        <p>No workshops available in this category.</p>
+        {{/if}}
+
+        <a href="/" class="create-button">Back to Home</a>
+    </div>
+</body>

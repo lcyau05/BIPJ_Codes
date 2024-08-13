@@ -1,0 +1,256 @@
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .rectangle-16,
+    .rectangle-16 * {
+        box-sizing: border-box;
+    }
+
+    .rectangle-16 {
+        background: #FD8087;
+        height: 94px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .headerinfo {
+        text-align: center;
+        margin: auto;
+        padding: 30px;
+    }
+
+    .form-container {
+        width: 80%;
+        max-width: 600px; /* Adjust width as needed */
+        margin: 20px auto; /* Center align and provide space */
+        background-color: #f0f0f0; /* Light grey background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+    }
+
+    .form-field {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .form-button {
+        background-color: #ABEFA5;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px; /* Space between buttons */
+    }
+
+    .form-button:hover {
+        background-color: #36d627; /* Darker shade on hover */
+    }
+
+    .form-actions {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .back-button {
+        background-color: #FF4003;
+        color: white;
+    }
+
+    .back-button:hover {
+        background-color: #bd3609;
+    }
+
+    .clear-button {
+        background-color: #f5a300;
+    }
+
+    .clear-button:hover {
+        background-color: #b47b0a;
+    }
+
+    .goals {
+        display: block;
+        margin: 0 auto;
+        width: 300px; /* Adjust the width as needed */
+        height: auto;
+    }    
+
+    .feedback-message {
+        text-align: center;
+        margin-top: 20px;
+        display: none;
+    }
+
+    .success {
+        color: green;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+
+<div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">MANAGE YOUR OWN GOALS</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- PLAN NOW ENJOY LATER -</h6>
+            </div>
+        </div>
+    </div>
+
+    <img class="goals" src="/img/goals.jpg" alt="Goals Image">
+
+    <div class="form-container">
+        <form id="goalForm" action="/goals/goalsform" method="POST">
+            <div class="form-field">
+                <label for="category" class="form-label">Category *</label>
+                <select id="category" name="category" class="form-select" required>
+                    <option value="Travel">Travel</option>
+                    <option value="Investment">Investment</option>
+                    <option value="Debt Repayment">Debt Repayment</option>
+                    <option value="Emergency">Emergency Fund</option>
+                    <option value="Education">Education</option>
+                    <option value="Car">Car</option>
+                    <option value="Retirement">Retirement</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="name" class="form-label">Goal Name *</label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="E.g., Travel to Korea" required>
+            </div>
+
+            <div class="form-field">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" id="description" name="description" class="form-input" placeholder="E.g., With Family">
+            </div>
+
+            <div class="form-field">
+                <label for="targetAmount" class="form-label">Target Amount *</label>
+                <input type="number" id="targetAmount" name="targetAmount" class="form-input" step="0.01" required>
+            </div>
+
+            <div class="form-field">
+                <label for="currentAmount" class="form-label">Current Amount *</label>
+                <input type="number" id="currentAmount" name="currentAmount" class="form-input" step="0.01" required>
+            </div>
+
+            <div class="form-field">
+                <label for="deadline" class="form-label">Deadline *</label>
+                <input type="date" id="deadline" name="deadline" class="form-input" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="form-button">Add</button>
+                <button type="button" class="form-button clear-button" onclick="clearForm()">Clear</button>
+                <button type="button" class="form-button back-button" onclick="goBack()">Back</button>
+            </div>
+        </form>
+        <div class="feedback-message" id="feedbackMessage"></div>
+    </div>
+
+    <script>
+    document.getElementById('goalForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission for validation
+
+        var category = document.getElementById('category').value;
+        var name = document.getElementById('name').value.trim();
+        var description = document.getElementById('description').value.trim();
+        var targetAmount = parseFloat(document.getElementById('targetAmount').value);
+        var currentAmount = parseFloat(document.getElementById('currentAmount').value || 0); // Default to 0 if empty
+        var deadline = new Date(document.getElementById('deadline').value);
+        var today = new Date();
+        var feedbackMessage = document.getElementById('feedbackMessage');
+
+        // Validate category
+        if (!category) {
+            showFeedback('Please select a category.', 'error');
+            return;
+        }
+
+        // Validate goal name
+        if (!name) {
+            showFeedback('Please enter a goal name.', 'error');
+            return;
+        }
+
+        // Validate description
+        if (!description) {
+            showFeedback('Please enter a description.', 'error');
+            return;
+        }
+
+        // Validate target amount
+        if (isNaN(targetAmount) || targetAmount <= 0) {
+            showFeedback('Target amount must be a positive number.', 'error');
+            return;
+        }
+
+        // Validate current amount
+        if (isNaN(currentAmount) || currentAmount < 0) {
+            showFeedback('Current amount cannot be negative.', 'error');
+            return;
+        }
+
+        // Validate deadline
+        if (deadline < today) {
+            showFeedback('Deadline cannot be in the past.', 'error');
+            return;
+        }
+
+        // Provide success feedback
+        showFeedback('Goal added successfully!', 'success');
+
+        // Submit the form after validation
+        setTimeout(function() {
+            document.getElementById('goalForm').submit();
+        }, 1500);
+    });
+
+    function clearForm() {
+        document.getElementById('goalForm').reset(); // Reset form fields
+        document.getElementById('feedbackMessage').style.display = 'none'; // Hide feedback message
+    }
+
+    function goBack() {
+        window.history.back(); // Go back to the previous page
+    }
+
+    function showFeedback(message, type) {
+        var feedbackMessage = document.getElementById('feedbackMessage');
+        feedbackMessage.textContent = message;
+        feedbackMessage.className = `feedback-message ${type}`;
+        feedbackMessage.style.display = 'block';
+    }
+</script>

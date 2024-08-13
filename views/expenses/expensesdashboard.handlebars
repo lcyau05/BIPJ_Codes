@@ -1,0 +1,497 @@
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .rounded-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .rounded-btn {
+        border-radius: 25px;
+        padding: 12px 25px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        color: #fff;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .rounded-btn:hover {
+        background-color: #555;
+        transform: translateY(-3px);
+    }
+
+    .rounded-btn:active {
+        background-color: #333;
+        transform: translateY(1px);
+    }
+
+    .add-expenses-btn {
+        background-color: #007bff;
+    }
+
+    .add-expenses-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .net-cashflow {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 18px;
+    }
+
+    .amount {
+        text-align: center;
+        font-size: 20px;
+        color: red;
+        margin-top: 5px;
+    }
+
+    .container-viewlatest,
+    .container-viewcategory {
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 1000px;
+        overflow: hidden;
+    }
+
+    .container h3 {
+        font-size: 1.5rem;
+        color: #333333;
+        margin-bottom: 15px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        table-layout: fixed;
+        font-size: 14px;
+    }
+
+    table th,
+    table td {
+        padding: 15px;
+        text-align: left;
+        border: 1px solid #dddddd;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table th {
+        background-color: #f0f0f0;
+        color: #555555;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 13px;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table tbody tr:hover {
+        background-color: #e6f7ff;
+        transition: background-color 0.3s ease;
+    }
+
+    table tbody td.income {
+        background-color: #dcedc8;
+        color: #006400;
+    }
+
+    table tbody td.expense {
+        background-color: #ffcdd2;
+        color: #8b0000;
+    }
+
+    .container h5.no-transactions {
+        font-size: 1.2rem;
+        color: #888888;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+        }
+    }
+
+    .rounded-buttons-money {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .rounded-display-money-in,
+    .rounded-display-money-out {
+        border-radius: 30px;
+        padding: 15px 30px;
+        font-size: 18px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+        border: 2px solid;
+    }
+
+    .rounded-display-money-in {
+        background-color: #dcedc8;
+        border-color: #a8b98c;
+    }
+
+    .rounded-display-money-out {
+        background-color: #ffcdd2;
+        border-color: #e19ca4;
+    }
+
+    .main-text-money {
+        font-size: 16px;
+    }
+
+    .sub-text-money {
+        font-size: 12px;
+        margin-top: 5px;
+        color: #333;
+    }
+
+    .view-all-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 1em;
+        color: #fff;
+        background-color: #5f5f5f;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .view-all-button:hover {
+        background-color: #2b2929;
+    }
+
+    .image-button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: inline-block;
+        outline: none;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-left: 1250px;
+        margin-top: 20px;
+    }
+
+    .image-button img {
+        display: block;
+        max-width: 40px;
+        height: auto;
+        border-radius: 5px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .image-button:hover img {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+
+    .image-button:active img {
+        transform: scale(0.95);
+    }
+
+    .dropdown-container {
+        text-align: center;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: #ffffff;
+        padding: 20px;
+        color: #333;
+        height: 100vh;
+        position: fixed;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+        color: #ebca5f;
+        text-align: left;
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar ul li {
+        margin-bottom: 20px;
+    }
+
+    .sidebar ul li a {
+        color: #333;
+        text-decoration: none;
+        font-size: 18px;
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .sidebar ul li a:hover {
+        background-color: #ebca5f;
+        color: #fff;
+    }
+</style>
+
+<div class="sidebar">
+    <h2>Expenses Dashboard</h2>
+    <ul>
+        <li><a href="/budgetdashboard">Budget Dashboard</a></li>
+        <li><a href="/budgetform">Add Budget</a></li>
+    </ul>
+</div>
+
+<div class="sidebar">
+    <h2>Expenses Dashboard</h2>
+    <ul>
+        <li><a href="/budgetdashboard">Budget Dashboard</a></li>
+        <li><a href="/budgetform">Add Budget</a></li>
+    </ul>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h1 class="mb-5">MANAGE YOUR OWN EXPENSES</h1>
+            <h6 class="section-title bg-white text-center text-primary px-3">- DASHBOARD -</h6>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="image-button" onclick="window.location.href='/expensesform'">
+    <img src="/img/plus.jpg" alt="Button Image" />
+</button>
+
+<div class="dropdown-container">
+    <label for="monthDropdown">Select Month:</label>
+    <select id="monthDropdown" name="month">
+        {{#each months}}
+        <option value="{{this}}" {{#ifEquals ../selectedMonth this}}selected{{/ifEquals}}>{{this}}</option>
+        {{/each}}
+    </select>
+</div>
+
+<br>
+<div class="amount" id="netCashflowAmount">
+    SGD {{netCashflow}}
+</div>
+
+<canvas id="myChart" style="max-width: 700px; height: 500px; display: block; margin: 0 auto;"></canvas>
+
+<div class="rounded-buttons-money">
+    <button id="moneyInButton" class="rounded-display-money-in">
+        <span class="main-text-money">Money In</span>
+        <span class="sub-text-money">SGD {{moneyIn}}</span>
+    </button>
+    <button id="moneyOutButton" class="rounded-display-money-out">
+        <span class="main-text-money">Money Out</span>
+        <span class="sub-text-money">SGD {{moneyOut}}</span>
+    </button>
+</div>
+
+<!-- Sections to be toggled -->
+html
+<div id="moneyInContent" class="container-viewcategory" style="display: none;">
+    <h3>Categorised <span style="color: #9dd461;">Income</span></h3>
+    <div style="margin-bottom: 15px; font-size: 1.2rem; color: #333;">For <strong>{{selectedMonth}}</strong></div>
+    <table id="moneyInTable" border="1">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each categorizedIncome}}
+            <tr>
+                <td>{{category}}</td>
+                <td>{{amount}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<div id="moneyOutContent" class="container-viewcategory">
+    <h3>Categorised <span style="color: #f3a8af;">Expenses</span></h3>
+    <div style="margin-bottom: 15px; font-size: 1.2rem; color: #333;">For <strong>{{selectedMonth}}</strong></div>
+    <table id="transactionsTableCategory" border="1">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each categorizedExpenses}}
+            <tr>
+                <td>{{category}}</td>
+                <td>{{amount}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<div class="container-viewlatest">
+    {{#if latestExpenses}}
+    <h3>Latest 5 Transactions</h3>
+    <table id="latestTransactionsTable" border="1">
+        <thead>
+            <tr>
+                <th>Transaction Type</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Transaction Date</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each latestExpenses}}
+            <tr>
+                <td class="{{transactionType}}">{{transactionType}}</td>
+                <td>{{category}}</td>
+                <td>{{amount}}</td>
+                <td>{{formatDate transactionDate 'DD-MM-YYYY'}}</td>
+                <td>{{description}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <h5 class="no-transactions">No Transactions Made</h5>
+    {{/if}}
+    <button type="button" class="view-all-button" onclick="window.location.href='/viewalltransactions'">
+        View All Transcations</button>
+</div>
+
+<br>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script>
+    document.getElementById('moneyInButton').addEventListener('click', function() {
+        document.getElementById('moneyInContent').style.display = 'block';
+        document.getElementById('moneyOutContent').style.display = 'none';
+    });
+
+    document.getElementById('moneyOutButton').addEventListener('click', function() {
+        document.getElementById('moneyInContent').style.display = 'none';
+        document.getElementById('moneyOutContent').style.display = 'block';
+    });
+
+    // addEventListener listers for the change event which occue when a user selects a different option dropdown menu
+    document.getElementById('monthDropdown').addEventListener('change', function () {
+        // this.value gets selected menu and store it in selectedMonth
+        const selectedMonth = this.value;
+        // URL has month selected included 
+        window.location.href = `/expensesdashboard?month=${encodeURIComponent(selectedMonth)}`;
+    });
+
+    const monthlyData = {{{ monthlyData }}};
+    const labels = Object.keys(monthlyData);
+
+    // Map each month label to its corresponding moneyIn value from monthlyData, creating an array of income data for each month
+    const moneyInData = labels.map(month => monthlyData[month].moneyIn);
+    // Map each month label to its corresponding moneyOut value from monthlyData, creating an array of expense data for each month
+    const moneyOutData = labels.map(month => monthlyData[month].moneyOut);
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            // x-axis (months)
+            labels: labels,
+            // 2 datasets (money in and money out)
+            datasets: [{
+                label: 'Money In',
+                backgroundColor: '#dcedc8',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                data: moneyInData,
+            }, {
+                label: 'Money Out',
+                backgroundColor: '#ffcdd2',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                data: moneyOutData,
+            }]
+        },
+        options: {
+            // Displays legend
+            legend: { display: true },
+            // Displays chart title 
+            title: {
+                display: true,
+            }
+        }
+    });
+
+    function updateChart(newMonthlyData) {
+        // newMonthlyData retrieves the keys (month names) from the newMonthlyData object and assign to new labels
+        const newLabels = Object.keys(newMonthlyData);
+        const newMoneyInData = newLabels.map(month => newMonthlyData[month].moneyIn || 0);
+        const newMoneyOutData = newLabels.map(month => newMonthlyData[month].moneyOut || 0);
+
+        // Updates the labels on the x-axis
+        myChart.data.labels = newLabels;
+        // Updates the data for money in dataset
+        myChart.data.datasets[0].data = newMoneyInData;
+        // Updates the data for money out dataset
+        myChart.data.datasets[1].data = newMoneyOutData;
+        myChart.update();
+    }
+
+    // Finds the HTML element with the ID and sets its innerHTML to display the money in and money out value formated as "SGD[amount]"
+    function updateMoneyInOut(moneyIn, moneyOut) {
+        document.getElementById('moneyInButton').innerHTML = `<span class="main-text-money">Money In</span><span class="sub-text-money">SGD ${moneyIn}</span>`;
+        document.getElementById('moneyOutButton').innerHTML = `<span class="main-text-money">Money Out</span><span class="sub-text-money">SGD ${moneyOut}</span>`;
+    }
+
+    // Finds the HTML element with the ID and sets the text content to display net cashflow formatted as "SGD[amount]"
+    function updateNetCashflow(netCashflow) {
+        document.getElementById('netCashflowAmount').textContent = `SGD ${netCashflow}`;
+    }
+
+    function AddBudget() {
+        window.location.href = '/budgetform';
+    }
+</script>

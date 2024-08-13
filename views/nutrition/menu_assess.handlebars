@@ -1,0 +1,150 @@
+<style>
+/* Title styling */
+.nutrition-title {
+    text-align: center;
+    color: #444;
+    font-size: 40px;
+    margin-bottom: 40px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Cards container styling */
+.nutrition-cards {
+    display: flex;
+    flex-wrap: wrap; /* Wrap cards if there are too many */
+    gap: 20px;
+    justify-content: center; /* Center align the cards */
+}
+
+/* Individual card styling */
+.nutrition-card {
+    background-color: #fff; /* Background color of the card */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex; /* Use flexbox for aligning content */
+    align-items: flex-start; /* Align items at the start of the card */
+    gap: 20px; /* Space between image and text */
+    width: calc(33% - 40px); /* Three cards per row with spacing */
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden; /* Hide overflow to maintain clean look */
+}
+
+/* Card hover effect */
+.nutrition-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Card title styling */
+.nutrition-card h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Card content styling */
+.nutrition-card p {
+    color: #666;
+    margin: 5px 0;
+}
+
+/* Strong text styling inside card */
+.nutrition-card p strong {
+    color: #333;
+}
+
+/* Image styling */
+.nutrition-card img {
+    max-width: 120px; /* Adjusted width */
+    height: auto;     /* Maintains aspect ratio */
+    border-radius: 8px; /* Rounded corners for image */
+    border: 1px solid #ddd; /* Optional: adds border to the image */
+}
+
+/* Adjustments for small screens */
+@media (max-width: 768px) {
+    .nutrition-card {
+        width: calc(50% - 20px); /* Two cards per row on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .nutrition-card {
+        width: calc(100% - 20px); /* One card per row on very small screens */
+    }
+}
+
+</style>
+
+<div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">NUTRITION INFORMATION</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- STAY HEALTHY WITH OUR MENU 
+                    YOU BETTER -</h6>
+            </div>
+            <div class="filter-section">
+            <label for="calorie-filter">Filter by Calories:</label>
+            <select id="calorie-filter" onchange="filterNutrition()">
+                <option value="all">All</option>
+                <option value="100-200">100-200</option>
+                <option value="200-300">200-300</option>
+                <option value="300-400">300-400</option>
+                <option value="400-500">400-500</option>
+            </select>
+        </div>
+        </div>
+    </div>
+{{#if Nutris.length}}
+    <div class="nutrition-cards" >
+        {{#each Nutris}}
+            <div class="nutrition-card" data-calories="{{calories}}">
+                <img src="{{imgpath}}" alt="Image not available"/>
+                <div class="nutrition-text">
+                    <h2>{{foodName}}</h2>
+                    <p><strong>Food Code:</strong> {{foodCode}}</p>
+                    <p><strong>Calories:</strong> {{calories}}</p>
+                    <p>{{description}}</p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{else}}
+    <p>No nutrition information available.</p>
+{{/if}}
+
+<script>
+    function filterNutrition() {
+        const filter = document.getElementById('calorie-filter').value;
+        const cards = document.querySelectorAll('.nutrition-card');
+
+        cards.forEach(card => {
+            const calories = parseInt(card.getAttribute('data-calories'), 10);
+            let showCard = false;
+
+            if (filter === 'all') {
+                showCard = true;
+            } else if (filter === '100-200' && calories >= 100 && calories <= 200) {
+                showCard = true;
+            } else if (filter === '200-300' && calories >= 200 && calories <= 300) {
+                showCard = true;
+            } else if (filter === '300-400' && calories >= 200 && calories <= 400) {
+                showCard = true;
+            } else if (filter === '400-500' && calories >= 400 && calories <= 500) {
+                showCard = true;
+            }
+
+            card.style.display = showCard ? 'block' : 'none';
+
+        });
+    }
+
+    // Call filterNutrition once when the page loads to set initial visibility
+    document.addEventListener('DOMContentLoaded', filterNutrition);
+</script>

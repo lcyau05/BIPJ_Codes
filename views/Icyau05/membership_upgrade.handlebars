@@ -1,0 +1,205 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">- MEMBERSHIP UPGRADE -</h6>
+            <h1 class="mb-5">UPGRADE MEMBERSHIP PLAN</h1>
+        </div>
+    </div>
+    <p style="text-align: center;">Current Plan: {{user.membership_status}}</p>
+</div>
+{{#ifEquals user.membership_status 'Basic'}}
+<form action="/create-checkout-session" method="POST">
+    <div class="subscription">
+        <div class="container">
+            <input type="hidden" id="lookup_key" name="lookup_key" value="" />
+            <div class="offers">
+                <h2>Basic Plan</h2>
+                <h4 class="price">Free</h4>
+                <small>Current</small>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> Goal Setting Tools</p>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> Free Access to Holistic Wellness Modules
+                </p>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> Recurring Insurance Premium Payment</p>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> Expense Management Tools</p>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> BMI results from Personalised Assessment
+                </p>
+                <button disabled>Free</button>
+            </div>
+            <div class="offers">
+                <h2>Monthly Plan</h2>
+                <h4 class="price">$4.55/Month</h4>
+                <small>Enjoy benefits on top of Basic Plan!</small>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> Financial Predictive Analysis</p>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> "The Game of Life" Interactive Planning"
+                    Modules</p>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> Free Entry to Various Workshops</p>
+                <p><i class="fas fa-check" style="color: rgb(8, 227, 8);"></i> Nutritional Recommendations based on
+                    Personalised Assessment</p>
+                <button type="submit" id="checkout-and-portal-button"
+                    onclick="setPlan('Monthly_Plan-0e0fe5f')">Subscribe</button>
+            </div>
+            <div class="offers">
+                <h2>Yearly Plan</h2>
+                <h3 class="small-colored" style="font-style: italic;">Best offer!</h3>
+                <h3 class="price">$34.80/Year</h3>
+                <h5>You can enjoy all the benefits from both Basic & Monthly Plans at a LOWER COST!!!</h5>
+                <h5 style="color: rgb(29, 173, 29);">That's $2.92 per month, save up $19.80 a year!</h5>
+                <button type="submit" id="checkout-and-portal-button"
+                    onclick="setPlan('Yearly_Plan-b55517c')">Subscribe</button>
+            </div>
+        </div>
+    </div>
+</form>
+{{else}}
+<form action="/create-portal-session" method="POST">
+  <button id="checkout-and-portal-button" class="btn btn-primary w-50 py-3" type="submit">Check Membership
+    Status</button>
+</form>
+{{/ifEquals}}
+
+<style>
+    *,
+    *::after,
+    *::before {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .subscription {
+        font-family: 'Rubik', sans-serif;
+        font-size: 18px;
+    }
+
+    .title {
+        text-align: center;
+        margin: 10px auto 50px auto;
+        z-index: 1;
+        margin-top: 100px;
+    }
+
+    h2 {
+        margin-top: 20px;
+    }
+
+    h4 {
+        margin-top: 30px;
+    }
+
+    p {
+        margin: 20px 30px;
+        font-size: 16px;
+    }
+
+    small {
+        font-size: 12px;
+        color: gray;
+    }
+
+    .small-colored {
+        color: #FD8087;
+    }
+
+    .subscription::before,
+    .subscription::after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .subscription::before {
+        border-top: 30vw solid #FD8087;
+        border-right: 30vw solid transparent;
+        top: 0;
+        left: 0;
+    }
+
+    .subscription::after {
+        border-bottom: 30vw solid #FD8087;
+        border-left: 30vw solid transparent;
+        right: 0;
+        margin-top: -50px;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: stretch;
+        z-index: 1;
+    }
+
+    .offers {
+        position: relative;
+        text-align: center;
+        background: #fff;
+        padding: 1%;
+        margin: 10px;
+        width: 300px;
+        height: auto;
+        top: 0;
+        border: 1px solid #eaeaea;
+        z-index: 1;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        /* Allows elements inside to stack vertically */
+        justify-content: space-between;
+        /* Distributes space evenly between items */
+    }
+
+    .offers:hover {
+        position: relative;
+        top: -20px;
+        box-shadow: 0px 14px 6px 0px #0000004d;
+    }
+
+    .offers:nth-child(2) {
+        border-top: 2px solid #FD8087;
+        box-shadow: 0 0 10px 0px #0000001c;
+    }
+
+    .offers:nth-child(2) h3 {
+        margin-top: 20px;
+    }
+
+    .offers:nth-child(2):hover {
+        box-shadow: 0px 14px 6px 0px #0000004d;
+    }
+
+    button {
+        font-size: 22px;
+        font-weight: 500;
+        background: #FD8087;
+        color: #fff;
+        margin: 30px auto 20px auto;
+        padding: 4% 8%;
+        border: 0;
+        transition-duration: 0.5s;
+    }
+
+    button:hover {
+        background: #FD8087;
+    }
+
+    .btn-primary {
+    margin: 0 auto;
+    display: block;
+    /* Optional for some button styles */
+  }
+</style>
+
+<script>
+    function setPlan(planKey) {
+        // Set the hidden input value to the selected plan's lookup key
+        document.getElementById('lookup_key').value = planKey;
+        // Submit the form
+        document.getElementById('subscriptionForm').submit();
+    }
+</script>

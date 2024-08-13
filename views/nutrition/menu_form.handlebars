@@ -1,0 +1,160 @@
+<style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .rectangle-16,
+        .rectangle-16 * {
+            box-sizing: border-box;
+        }
+
+        .rectangle-16 {
+            background: #fad676;
+            height: 94px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .headerinfo {
+            text-align: center;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .form-container {
+            width: 80%;
+            max-width: 600px; /* Adjust width as needed */
+            margin: 20px auto; /* Center align and provide space */
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-button {
+            background-color: #ABEFA5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        .form-button:hover {
+            background-color: #36d627; /* Darker shade on hover */
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: #FF4003;
+            color: #white;
+        }
+
+        .back-button:hover {
+            background-color: #bd3609;
+        }
+
+        .clear-button {
+            background-color: #e60a0af1;
+        }
+
+        .clear-button:hover {
+            background-color: #b47b0a;
+        }
+
+        .form-radio-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">NUTRITION MENU ADD </h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- ADDING MENU 
+                     -</h6>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-container">
+        <form id="basicForm" action="/Nutriroutes/submission" method="post" >
+            <div class="form-field">
+                <label for="foodCode" class="form-label">Code</label>
+                <textarea id="foodCode" name="foodCode" class="form-input" rows="1" placeholder="E.g. A01,B01" required></textarea>
+            </div>
+
+            <div class="form-field">
+            <label for="foodName" class="form-label">Name</label>
+                <textarea id="foodName" name="foodName" class="form-input" rows="1" placeholder="E.g. Chicken Rice" required></textarea>
+            </div>
+
+            <div class="form-field">
+            <label for="calories" class="form-label">Calories</label>
+                <textarea id="calories" name="calories" class="form-input" rows="1" placeholder="E.g. 388" required></textarea>
+            </div>
+
+            <div class="form-field">
+            <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-input" rows="3" placeholder="E.g. Protein and Carbs Filled" required></textarea>
+            </div>
+
+            <div class="form-field">
+            <label for="imgpath" class="form-label">Image Path</label>
+                <textarea id="imgpath" name="imgpath" class="form-input" rows="1" placeholder="E.g. /img/Image.jpg" required></textarea>
+            </div>
+
+
+        
+             <div class="form-actions">
+                <button type="button" class="form-button" onclick="clearForm()">Reset</button>
+                <button type="submit" class="form-button">Submit</button>
+             </div>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript functions for button actions
+        function clearForm() {
+            document.getElementById('basicForm').reset(); // Reset form fields
+        }
+    </script>
+

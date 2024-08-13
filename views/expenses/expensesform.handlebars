@@ -1,0 +1,261 @@
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .rectangle-16,
+    .rectangle-16 * {
+        box-sizing: border-box;
+    }
+
+    .rectangle-16 {
+        background: #FD8087;
+        height: 94px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .headerinfo {
+        text-align: center;
+        margin: auto;
+        padding: 30px;
+    }
+
+    .form-container {
+        width: 80%;
+        max-width: 600px; /* Adjust width as needed */
+        margin: 20px auto; /* Center align and provide space */
+        background-color: #f0f0f0; /* Light grey background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+    }
+
+    .form-field {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .form-button {
+        background-color: #ABEFA5;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px; /* Space between buttons */
+    }
+
+    .form-button:hover {
+        background-color: #36d627; /* Darker shade on hover */
+    }
+
+    .form-actions {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .back-button {
+        background-color: #FF4003;
+        color: #white;
+    }
+
+    .back-button:hover {
+        background-color: #bd3609;
+    }
+
+    .clear-button {
+        background-color: #f5a300;
+    }
+
+    .clear-button:hover {
+        background-color: #b47b0a;
+    }
+
+    .feedback-message {
+        text-align: center;
+        margin-top: 20px;
+        display: none;
+    }
+
+    .success {
+        color: green;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .piggy-bank {
+        display: block;
+        margin: 0 auto;
+        width: 200px; /* Adjust the width as needed */
+        height: auto;
+    }
+</style>
+<div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">MANAGE YOUR OWN EXPENSES</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- ADD YOUR INCOME AND EXPENSES NOW -</h6>
+            </div>
+        </div>
+    </div>
+
+    <img class="piggy-bank" src="/img/piggybank.jpg" alt="">    
+
+    <div class="form-container">
+        <form id="expenseForm" action="/expenses/expensesform" method="post">
+            <div class="form-field">
+                <label for="transactionType" class="form-label">Transaction Type *</label>
+                <select id="transactionType" name="transactionType" class="form-select" onchange="updateCategories()">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="category" class="form-label">Category *</label>
+                <select id="category" name="category" class="form-select">
+                    <!-- Categories will be populated dynamically -->
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="amount" class="form-label">Amount *</label>
+                <input type="number" id="amount" name="amount" class="form-input" required>
+            </div>
+
+            <div class="form-field">
+                <label for="transactionDate" class="form-label">Transaction Date *</label>
+                <input type="date" id="transactionDate" name="transactionDate" class="form-input" required>
+            </div>
+
+            <div class="form-field">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-input" rows="3"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="form-button">Add</button>
+                <button type="button" class="form-button clear-button" onclick="clearForm()">Clear</button>
+                <button type="button" class="form-button back-button" onclick="goBack()">Back</button>
+            </div>
+        </form>
+        <div class="feedback-message" id="feedbackMessage"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCategories();
+        });
+
+        function updateCategories() {
+            const transactionType = document.getElementById('transactionType').value;
+            const categorySelect = document.getElementById('category');
+
+            // Clear existing options
+            categorySelect.innerHTML = '';
+
+            // Define category options
+            const categories = {
+                income: [
+                    { value: 'transfer', text: 'Transfer' }
+                ],
+                expense: [
+                    { value: 'transfer', text: 'Transfer' },
+                    { value: 'dining', text: 'Dining' },
+                    { value: 'transportation', text: 'Transportation' },
+                    { value: 'shopping', text: 'Shopping' },
+                    { value: 'entertainment', text: 'Entertainment and Leisure' },
+                    { value: 'others', text: 'Others' },
+                ]
+            };
+
+            // Populate category options based on transaction type
+            categories[transactionType].forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.value;
+                option.textContent = category.text;
+                categorySelect.appendChild(option);
+            });
+        }
+
+        function clearForm() {
+            document.getElementById('expenseForm').reset(); // Reset form fields
+        }
+
+        function goBack() {
+            window.history.back(); // Go back to previous page
+        }
+
+
+        document.getElementById('expenseForm').addEventListener('submit', function(event) {
+            var transactionType = document.getElementById('transactionType').value;
+            var category = document.getElementById('category').value;
+            var amount = parseFloat(document.getElementById('amount').value);
+            var transactionDate = new Date(document.getElementById('transactionDate').value);
+            var today = new Date();
+
+            // Validate transaction type
+            if (!transactionType) {
+                event.preventDefault();
+                showFeedback('Please select a transaction type.', 'error');
+                return;
+            }
+
+            // Validate category
+            if (!category) {
+                event.preventDefault();
+                showFeedback('Please select a category.', 'error');
+                return;
+            }
+
+            // Validate amount
+            if (isNaN(amount) || amount <= 0) {
+                event.preventDefault();
+                showFeedback('Amount must be a positive number.', 'error');
+                return;
+            }
+
+            // Validate transaction date
+            if (transactionDate > today) {
+                event.preventDefault();
+                showFeedback('Transaction date cannot be in the future.', 'error');
+                return;
+            }
+
+            // Provide success feedback
+            showFeedback('Form submitted successfully!', 'success');
+        });
+
+        function showFeedback(message, type) {
+            var feedbackMessage = document.getElementById('feedbackMessage');
+            feedbackMessage.textContent = message;
+            feedbackMessage.className = `feedback-message ${type}`;
+            feedbackMessage.style.display = 'block';
+        }
+    </script>

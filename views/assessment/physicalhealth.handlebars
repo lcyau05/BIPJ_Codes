@@ -1,0 +1,315 @@
+<style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .rectangle-16,
+        .rectangle-16 * {
+            box-sizing: border-box;
+        }
+
+        .rectangle-16 {
+            background: #fad676;
+            height: 94px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .headerinfo {
+            text-align: center;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .form-container {
+            width: 80%;
+            max-width: 600px; /* Adjust width as needed */
+            margin: 20px auto; /* Center align and provide space */
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-button {
+            background-color: #ABEFA5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        .form-button:hover {
+            background-color: #36d627; /* Darker shade on hover */
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: #FF4003;
+            color: #white;
+        }
+
+        .back-button:hover {
+            background-color: #bd3609;
+        }
+
+        .clear-button {
+            background-color: #f5a300;
+        }
+
+        .clear-button:hover {
+            background-color: #b47b0a;
+        }
+
+        .form-radio-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .red-text {
+            color: #bd3609;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">PERSONALIZED ASSESSMENT - PHYSICAL HEALTH</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- HELPS US GET TO UNDERSTAND 
+                    YOU BETTER -</h6>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-container">
+        <form id="physicalHealthForm">
+            <div class="form-field">
+                <label for="healthscreen" class="form-label">Do you undergo any Health Screening?</label>
+                <div class="form-radio-group" id="healthscreen">
+                    <label class="form-radio-label">
+                        <input type="radio" name="healthscreen" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="healthscreen" value="no" required> No
+                    </label>
+                </div>
+            </div>
+            <div class="form-field">
+                <label for="hsreport" class="red-text">Do you have any medical condition? If yes, please fill up</label>
+                <textarea id="hsreport" name="hsreport" class="form-input" rows="1"></textarea>
+            </div>
+
+            <div class="form-field">
+                <label for="aller" class="form-label">Do you have any allergies?</label>
+                <div class="form-radio-group" id="aller">
+                    <label class="form-radio-label">
+                        <input type="radio" name="aller" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="aller" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="allergies" class="form-label">If so, what are they?</label>
+                <textarea id="allergies" name="allergies" class="form-input" rows="2"></textarea>
+            </div>
+
+            <div class="form-field">
+            <label for="smoke" class="form-label">Do you smoke or use tobacco products?</label>
+            <div class="form-radio-group" id="smoke">
+                <label class="form-radio-label">
+                    <input type="radio" name="smoke" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="smoke" value="no" required> No
+                </label>
+            </div>
+            </div>
+
+            <div class="form-field">
+            <label for="alchohol" class="form-label">How often do you consume alcohol?</label>
+            <div class="form-radio-group" id="alchohol">
+                <label class="form-radio-label">
+                    <input type="radio" name="alchohol" value="never" required> Never
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="alchohol" value="occasionally" required> Ocassionally
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="alchohol" value="frequently" required> Frequently
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="alchohol" value="daily" required> Daily
+                </label>
+            </div>
+            </div>
+
+            <div class="form-field">
+            <label for="bloodpressure" class="form-label">Do you have a history of high blood pressure?</label>
+            <div class="form-radio-group" id="bloodpressure">
+                <label class="form-radio-label">
+                    <input type="radio" name="bloodpressure" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="bloodpressure" value="no" required> No
+                </label>
+            </div>
+            </div>
+
+            <div class="form-field">
+                <label for="premedic" class="form-label">Are you currently taking any long-term prescription medication?</label>
+                <div class="form-radio-group" id="premedic">
+                    <label class="form-radio-label">
+                        <input type="radio" name="premedic" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="premedic" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="headaches" class="form-label">Do you experience frequent headaches or migranes?</label>
+                <div class="form-radio-group" id="headaches">
+                    <label class="form-radio-label">
+                        <input type="radio" name="headaches" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="headaches" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="chronic" class="form-label">Do you experience any chronic pain e.g. back pain, joint pain?</label>
+                <div class="form-radio-group" id="chronic">
+                    <label class="form-radio-label">
+                        <input type="radio" name="chronic" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="chronic" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="injuries" class="form-label">Do you have any existing injuries or physical limitations that affect your daily activities?</label>
+                <div class="form-radio-group" id="injuries">
+                    <label class="form-radio-label">
+                        <input type="radio" name="injuries" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="injuries" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+            <label for="heartcond" class="form-label">Have you ever been diagnosed with any heart-related conditions?</label>
+            <div class="form-radio-group" id="coping">
+                <label class="form-radio-label">
+                    <input type="radio" name="heartcond" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="heartcond" value="no" required> No
+                </label>
+            </div>
+            </div>
+
+            <!-- Hidden fields to include `localStorage` data -->
+        <input type="hidden" id="hidden-ageGroup" name="ageGroup">
+        <input type="hidden" id="hidden-rsStatus" name="rsStatus">
+        <input type="hidden" id="hidden-income" name="income">
+        <input type="hidden" id="hidden-dependants" name="dependants">
+        <input type="hidden" id="hidden-vehicle" name="vehicle">
+        <input type="hidden" id="hidden-height" name="height">
+        <input type="hidden" id="hidden-weight" name="weight">
+        <input type="hidden" id="hidden-goals" name="goals">
+        <input type="hidden" id="hidden-sgoals" name="sgoals">
+
+            <div class="form-actions">
+                <button type="button" class="form-button next-button" onclick="goToNextPage()">Next</button>
+            </div>
+        
+
+        </form>
+    </div>
+
+    <script>
+        function goToNextPage() {
+            console.log('goToNextPage called');
+            const form = document.getElementById('physicalHealthForm');
+            const formData = new FormData(form);
+
+            for (const [key, value] of formData.entries()) {
+                console.log(`Saving ${key} = ${value}`);
+                localStorage.setItem(key, value);
+                }
+            window.location.href = '/mentalhealth';
+        }
+
+         // Populate form fields with data from localStorage
+         //DOM runs when fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+             const form = document.getElementById('physicalHealthForm');
+
+        // Retrieve stored data ftom localStorage
+        const keys = [
+            'ageGroup', 'rsStatus', 'income', 'dependants', 'vehicle',
+            'height', 'weight', 'goals', 'sgoals'
+        ];
+
+        // Loop. For each key, it retrieves the corresponding value from localStorage 
+        // and sets it as the value of the hidden input field with the matching ID (hidden-${key}).
+        keys.forEach(key => {
+            const value = localStorage.getItem(key);
+            if (value) {
+                // Set hidden input fields with localStorage data
+                const hiddenInput = document.getElementById(`hidden-${key}`);
+                if (hiddenInput) {
+                    hiddenInput.value = value;
+                }
+            }
+        });
+    });
+    </script>

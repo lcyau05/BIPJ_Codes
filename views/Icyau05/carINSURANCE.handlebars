@@ -1,0 +1,225 @@
+<br><br><br>
+<div class="carQns" style="margin: 0 auto;">
+    <h4 style="text-align: center; font-size: 2.5em; text-decoration-line: underline;">&#128663; CAR INSURANCE
+        &#128663;</h4>
+    <h5 style="text-align: center;">| Build Your Perfect Plan |</h5>
+    <br><br>
+    <div class="row">
+        <div class="col">
+            <a href="/insurancehome"><i class="fas fa-arrow-circle-left"
+                    style="font-size:25px; color:#FD8087; margin-left: 80px;">&nbsp;BACK</i></a>
+        </div>
+        <div class="col" style="text-align: center;">
+            <h4><a
+                    href="https://singlife.com/content/dam/public/sg/documents/lifestyle-insurance/singlife-car-insurance/summary-of-cover.pdf">
+                    Read Our Policy Booklet |</a><a href="" onclick="resetInsurance()">
+                    Reset |</a></h4>
+        </div>
+    </div><br>
+    <table class="insuranceplan">
+        <thead>
+            <tr>
+                <th>Key Features</th>
+                {{#each planNames}}
+                <th>{{this}}<br>{{#if (lookup ../totalCosts this)}}<i class="fas fa-dollar-sign"
+                        style="color: #FD8087;"></i>&nbsp;{{lookup ../totalCosts this}}{{/if}}<br><button
+                        class="cartbuy" data-plan-id="{{this}}" style="font-size: 20px; width: 20; height: 10;">Select
+                        Plan</button></th>
+                {{/each}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each featureMatrix}}
+            {{#unless optional}}
+            <tr>
+                <td style="position: relative; padding-left: 30px;"><i class="fas fa-times option-trigger"
+                        style="color: #FD8087; font-size: 25px; position: absolute; top: 10px; left: 10px;"
+                        data-feature-id="{{featName}}"></i>{{featName}}<br><i>{{featDescription}}</i></td>
+                {{#each ../planNames}}
+                <td>
+                    {{#if (lookup ../plans this)}}
+                    <i class="fas fa-dollar-sign" style="color: #FD8087;"></i>&nbsp;{{lookup ../plans this}}
+                    {{else}}
+                    N/A
+                    {{/if}}
+                </td>
+                {{/each}}
+            </tr>
+            {{/unless}}
+            {{/each}}
+        </tbody>
+    </table>
+    <h3 style="text-decoration: underline; padding-left: 50px; padding-top: 30px;">Customisation</h3>
+    <h5 style="padding-left: 80px;">Add Ons:</h5>
+    <div class="button-option-group">
+        {{#each featureMatrix}}
+        {{#if optional}}
+        <button class="btn btn-primary option-button" data-feature-id="{{featName}}">
+            <i class="fas fa-plus" style="color: #f8f8f8;"></i>&nbsp;{{featName}}
+        </button>
+        {{/if}}
+        {{/each}}
+    </div>
+</div>
+<style>
+    #vehNo {
+        width: 200px;
+        height: 50px;
+        stroke-width: 1px;
+        stroke: #000;
+        border-radius: 10px;
+    }
+
+    .carQns {
+        width: 1265px;
+        height: auto;
+        border-radius: 128px;
+        background: rgba(217, 217, 217, 0.49);
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .insuranceplan {
+        width: 1161px;
+        /*height: 1617px;*/
+        height: auto;
+        margin: 0 auto;
+        border-radius: 20px;
+        border: 2px solid #000;
+        background: #FFF;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        text-align: center;
+        padding: 15px;
+    }
+
+    th {
+        font-size: 20px;
+        font-weight: bolder;
+    }
+
+    td {
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    td i {
+        font-size: 15px;
+        font-weight: lighter;
+    }
+
+    #coolDropdown select {
+        font-size: large;
+        text-align: center;
+        border: none;
+        padding: 10px;
+        width: 80%;
+        cursor: pointer;
+        margin: 0 auto;
+        border-bottom: 2px solid black;
+        /* Adjust the thickness and color as needed */
+    }
+
+    .button-option-group {
+        padding-left: 50px;
+        padding-right: 50px;
+        justify-content: center;
+    }
+
+    .option-button {
+        background-color: #48a3b3 !important;
+        color: #ffffff;
+        width: auto;
+        margin-right: 20px;
+    }
+</style>
+<script>
+    const insuranceType = '{{insuranceType}}';
+    $(document).ready(function () {
+        $('.option-button').click(function (event) {
+            event.preventDefault();
+            const featName = $(this).data('feature-id');
+            const planCategory = insuranceType; // Adjust as per your actual planCategory logic
+
+            // Send an AJAX request to update the feature
+            $.ajax({
+                type: 'POST',
+                url: '/insur/updateOptionalFeature', // Adjust the URL as per your backend route
+                data: { featName: featName, planCategory: planCategory },
+                success: function (response) {
+                    console.log('Feature updated successfully:', response);
+                    window.location.href = '/Insurance'; // Redirect to success page
+                },
+                error: function (err) {
+                    console.error('Error updating feature:', err);
+                    // Handle errors
+                }
+            });
+        });
+        $('.option-trigger').click(function (event) {
+            event.preventDefault();
+            const featName = $(this).data('feature-id');
+            const planCategory = insuranceType; // Adjust as per your actual planCategory logic
+
+            // Send an AJAX request to update the feature
+            $.ajax({
+                type: 'POST',
+                url: '/insur/updateCompulsoryFeature', // Adjust the URL as per your backend route
+                data: { featName: featName, planCategory: planCategory },
+                success: function (response) {
+                    console.log('Feature updated successfully:', response);
+                    window.location.href = '/Insurance'; // Redirect to success page
+                },
+                error: function (err) {
+                    console.error('Error updating feature:', err);
+                    // Handle errors
+                }
+            });
+        });
+        $('.cartbuy').click(function (event) {
+            event.preventDefault();
+            const planName = $(this).data('plan-id');
+
+            // Send an AJAX request to store the feature name in session
+            $.ajax({
+                type: 'POST',
+                url: '/insur/storePlanName',
+                data: { planName: planName },
+                success: function (response) {
+                    console.log('Feature name stored in session:', planName);
+                    window.location.href = '/payment'; // Redirect to success page
+                    // Handle success as needed
+                },
+                error: function (err) {
+                    console.error('Error storing feature name:', err);
+                    // Handle errors
+                }
+            });
+        });
+    });
+    function goBack() {
+        history.back(); // Go back to the previous page
+
+        // Optionally, you can reload the previous page to retrieve the saved data
+        // location.reload(); // Uncomment this line if you want to reload the previous page
+    }
+    function resetInsurance() {
+        fetch('/insur/resetinsur', {
+            method: 'POST'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Table reset successfully');
+                    // Optionally, reload the page or update the UI
+                    location.reload();
+                } else {
+                    console.error('Failed to reset table:', data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>

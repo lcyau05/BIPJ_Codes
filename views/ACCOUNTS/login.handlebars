@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    .container{
+      text-align: center;
+    }
+    .login_form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .row {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    label {
+      width: 100%;
+      text-align: left;
+    }
+    .forgot-password, .create-account {
+      display: block;
+      margin-top: 10px;
+      color: #FD8087;
+      text-decoration: none;
+    }
+    .forgot-password:hover, .create-account:hover {
+      text-decoration: underline;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #FD8087;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff5c64;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-xxl py-5">
+    <div class="container">
+      <form action="/user/login" method="post">
+        <div class="">
+          <h2>Login Page</h2>
+          <div class="login_form d-flex justify-content-center">
+            <div class="container">
+              <div class="row w-100 mb-3">
+                <div class="col-lg-6 col-md-12">
+                  <label for="email">Email:</label>
+                  <input type="email" name="email" placeholder="E.g. abc@gmail.com" class="form-control" required>
+                </div>
+              </div>
+              <div class="row w-100">
+                <div class="col-lg-6 col-md-12">
+                  <label for="password">Password:</label>
+                  <input type="password" name="password" placeholder="Password" class="form-control" required>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><br><br>
+        <button type="submit">Login</button><br><br>
+        <a href="/sign_up" class="create-account">Not a user? Create an account</a>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

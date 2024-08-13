@@ -1,0 +1,261 @@
+<style>
+    .container-record {
+        width: 100%;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+    }
+
+    .record-count {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        color: #4CAF50;
+        /* same color as the table header */
+    }
+
+    h3 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .record-count {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        color: #333;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    td {
+        color: #555;
+    }
+
+    th {
+        background-color: #9f0606;
+        color: rgb(247, 242, 242);
+    }
+
+    td,
+    th {
+        text-align: center;
+    }
+
+    .chart-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    #statusChart {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+</style>
+<div class="container-record">
+    {{#if PAs}}
+    <h3>PA Records</h3>
+    <div class="record-count">
+        Total Records: {{PAs.length}}
+    </div>
+
+    <!-- Search input -->
+    <div>
+        <label for="searchStatus">Filter by Relationship Status:</label>
+        <select id="searchStatus" onchange="filterByStatus()">
+            <option value="">All</option>
+            <option value="single">Single</option>
+            <option value="married">Married</option>
+            <option value="widowed">Widowed</option>
+            <option value="divorced">Divorced</option>
+            <option value="separated">Separated</option>
+        </select>
+    </div>
+
+    <!-- Pie Chart Container -->
+    <h3>Relationship Status Distribution</h3>
+    <div class="chart-container">
+        <canvas id="statusChart"></canvas>
+    </div>
+    <table border="2">
+        <th>USER ID</th>
+        <th>AGE GROUP</th>
+        <th>STATUS</th>
+        <th>INCOME RANGE</th>
+        <th>DEPENDANTS</th>
+        <th>USELESS</th>
+        <th>HEIGHT</th>
+        <th>WEIGHT</th>
+        <th>GOALS</th>
+        <th>PSCORE</th>
+        <th>PCATEGORY</th>
+        <th>MCATEGORY</th>
+        <th>MSCORE</th>
+        <th>DELETE</th>
+        {{#each PAs}}
+        <tr>
+            <td>{{userId}}</td>
+            <td>{{ageGroup}}</td>
+            <td>{{rsStatus}}</td>
+            <td>{{income}}</td>
+            <td>{{dependants}}</td>
+            <td>{{useless}}</td>
+            <td>{{height}}</td>
+            <td>{{weight}}</td>
+            <td>{{goals}}</td>
+            <td>{{pscore}}</td>
+            <td>{{pcategory}}</td>
+            <td>{{mhcategory}}</td>
+            <td>{{mhScore}}</td>
+
+            <td>
+                <button class="delete-btn" onclick="deleteRecord('{{id}}')">Delete</button>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+    {{else}}
+    <h3>No Records Found</h3>
+    {{/if}}
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // AJAX Asynchronous Javascript and XML
+    //technique used in web dev to create more dynamic and interactive web app
+    //AJAX Call: sends an HTTP GET request to the URL
+    // URL: dynamically includes the record ID, making the req specific to the record in question
+    // Success: redirect to page
+
+
+
+    function deleteRecord(id) {
+        if (confirm("Are you sure you want to delete this record?")) {
+            fetch(`/delete/${id}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                        alert("Record deleted successfully");
+                    } else {
+                        alert("Failed to delete the record");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Deleted the record");
+                });
+        }
+    }
+
+    function filterByStatus() {
+        var status = document.getElementById('searchStatus').value.toLowerCase();
+        var table = document.querySelector('table');
+        var rows = table.getElementsByTagName('tr');
+
+        // Loop through all table rows, and hide those who don't match the status filter
+        for (var i = 1; i < rows.length; i++) {
+            var statusColumn = rows[i].getElementsByTagName('td')[1]; // Index 1 for STATUS column
+            if (status === '' || statusColumn.textContent.toLowerCase() === status) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+
+    //  check value in STATUS column (2nd column)
+    // if selected status is empty (meaning "All") or matches the row's status, row is shown
+    // otherwise row is hidden
+
+    // Gather data for rsStatus (Relationship Status)
+    const statusData = {};
+    document.querySelectorAll('tr').forEach((row, index) => {
+        if (index === 0) return; // skip the header row
+
+        const status = row.querySelector('td:nth-child(3)').textContent.trim(); // 2nd column for STATUS
+        if (status) {
+            statusData[status] = (statusData[status] || 0) + 1;
+        }
+    });
+
+    // Prepare data for the pie chart
+    const chartData = {
+        labels: Object.keys(statusData),
+        datasets: [{
+            label: 'Relationship Status',
+            data: Object.values(statusData),
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    // Draw the chart
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    const statusChart = new Chart(ctx, {
+        type: 'pie',
+        data: chartData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+</script>

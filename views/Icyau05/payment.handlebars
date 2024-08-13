@@ -1,0 +1,386 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">- PAYMENT -</h6>
+            <h1 class="mb-5">INSURANCE PURCHASE</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h2>Debit/Credit Card &nbsp;<i id="cardIcon" style="color: #FD8087;" class="fas fa-credit-card"></i>
+    </h2>
+    <form class="payment" id="paymentForm" action="/insur/submitPayment" method="post">
+        <div class="feature-group">
+            <h5>Card Information</h5>
+            <div class="row g-3 feature-item">
+                <div class="row g-3">
+                    <div class="col-lg-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="cardName" placeholder="Card Holder's Name">
+                            <label for="cardName">Card Holder's Name</label>
+                            <span class="validation-message" id="cardNameMessage"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="cardNo" placeholder="Card Number"
+                                maxlength="19">
+                            <label for="cardNo">Card Number</label>
+                            <span class="validation-message" id="cardNoMessage"></span>
+                            <span class="card-type" id="cardType"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-xl-8">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="expDate"
+                                placeholder="Card Expiry Date - MM/YYYY" maxlength="7">
+                            <label for="expDate">Card Expiry Date</label>
+                            <span class="validation-message" id="expDateMessage"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-xl-4">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="cvv" placeholder="CVV" maxlength="4">
+                            <label for="cvv">CVV</label>
+                            <span class="validation-message" id="cvvMessage"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="text-center" style="padding: 20px 0;">
+            <button type="submit" class="btn btn-primary">Payment</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .payment {
+        padding: 20px;
+        flex: 1;
+    }
+
+    button {
+        width: 177px;
+        height: 59px;
+        font-size: 22px;
+        font-weight: 500;
+        background: #FD8087;
+        color: #fff;
+        margin: 30px auto 20px auto;
+        padding: 4% 8%;
+        border: 2px solid #828282;
+        border-radius: 20px;
+        transition-duration: 0.5s;
+    }
+
+    .validation-message {
+        color: red;
+        font-size: 12px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .card-type {
+        display: block;
+        font-size: 14px;
+        margin-top: 5px;
+        color: blue;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('cardNo').addEventListener('blur', validateCardNoInput);
+        document.getElementById('cardNo').addEventListener('input', restrictCardNoInput);
+        document.getElementById('cardNo').addEventListener('input', identifyCardType);
+        document.getElementById('cardName').addEventListener('blur', validateCardNameInput);
+        document.getElementById('cardName').addEventListener('input', restrictCardNameInput);
+        document.getElementById('expDate').addEventListener('blur', validateExpDateInput);
+        document.getElementById('expDate').addEventListener('input', restrictExpDateInput);
+        document.getElementById('cvv').addEventListener('blur', validateCVVInput);
+        document.getElementById('cvv').addEventListener('input', restrictNumericInput);
+    });
+
+    function restrictNumericInput(event) {
+        const cvvInput = document.getElementById('cvv');
+        cvvInput.value = cvvInput.value.replace(/[^0-9]/g, '');
+    }
+
+    function restrictCardNoInput(event) {
+        const cardNoInput = document.getElementById('cardNo');
+        //cardNoInput.value = cardNoInput.value.replace(/[^0-9]/g, '');
+        let cardNumber = cardNoInput.value.replace(/\D/g, ''); // Remove non-digit characters
+
+        // Format card number with hyphens after every 4 digits
+        if (cardNumber.length > 4) {
+            cardNumber = cardNumber.replace(/(\d{4})(?=\d)/g, '$1-');
+        }
+
+        cardNoInput.value = cardNumber;
+    }
+
+    function restrictCardNameInput(event) {
+        const cardNameInput = document.getElementById('cardName');
+        cardNameInput.value = cardNameInput.value.replace(/[^a-zA-Z\s]/g, '');
+    }
+
+    function restrictExpDateInput(event) {
+        const expDateInput = document.getElementById('expDate');
+        expDateInput.value = expDateInput.value.replace(/[^0-9\/]/g, '');
+
+        // Add slash if not present and length is 3 (MM part is complete)
+        if (expDateInput.value.length === 2 && expDateInput.value.indexOf('/') === -1) {
+            expDateInput.value = expDateInput.value + '/';
+        }
+    }
+
+    function validateCardNoInput() {
+        const cardNoInput = document.getElementById('cardNo');
+        const cardNumber = cardNoInput.value.replace(/-/g, '').replace(/\s/g, ''); // Remove hyphens and spaces
+        const cardNoMessage = document.getElementById('cardNoMessage');
+
+        if (!validateCardNumber(cardNumber)) {
+            cardNoMessage.textContent = 'Invalid credit card number. Please check and try again.';
+        } else {
+            cardNoMessage.textContent = '';
+        }
+    }
+
+
+    function validateCardNameInput() {
+        const cardName = document.getElementById('cardName').value;
+        const cardNameMessage = document.getElementById('cardNameMessage');
+
+        if (cardName.trim() === '' || !/^[a-zA-Z\s]*$/.test(cardName)) {
+            cardNameMessage.textContent = 'Please enter the card holder\'s name (alphabets only).';
+        } else {
+            cardNameMessage.textContent = '';
+        }
+    }
+
+    function validateExpDateInput() {
+        const expDate = document.getElementById('expDate').value;
+        const expDateMessage = document.getElementById('expDateMessage');
+
+        if (!validateExpiryDate(expDate)) {
+            expDateMessage.textContent = 'Invalid expiry date. Please enter a valid expiry date in MM/YYYY format.';
+        } else {
+            expDateMessage.textContent = '';
+        }
+    }
+
+    function validateExpiryDate(date) {
+        // Check the format of the date
+        const regex = /^(0[1-9]|1[0-2])\/\d{4}$/;
+        if (!regex.test(date)) {
+            return false;
+        }
+
+        // Extract month and year from the date
+        const [inputMonth, inputYear] = date.split('/').map(Number);
+
+        // Get the current date
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth() + 1; // Months are 0-based in JavaScript
+        console.log('currentMonth', currentMonth);
+        console.log('currentYear', currentYear);
+        console.log('inputMonth', inputMonth);
+        console.log('inputYear', inputYear);
+
+        // Check if the year is within the next 5 years range
+        const isValidYear = inputYear >= currentYear && inputYear <= currentYear + 5;
+        if (!isValidYear) {
+            return false;
+        }
+
+        // If the year is within the valid range, check if the month is valid
+        if (inputYear === currentYear) {
+            // Check if the month is not before the current month
+            return inputMonth >= currentMonth && inputMonth <= 12;
+        }
+
+        // If the year is valid and greater than the current year, just ensure the month is valid
+        return inputMonth >= 1 && inputMonth <= 12;
+    }
+
+    function validateCVVInput() {
+        const cvv = document.getElementById('cvv').value;
+        const cvvMessage = document.getElementById('cvvMessage');
+
+        if (!validateCVV(cvv)) {
+            cvvMessage.textContent = 'Invalid CVV. Please enter a valid CVV.';
+        } else {
+            cvvMessage.textContent = '';
+        }
+    }
+
+    function identifyCardType() {
+        const cardNumber = document.getElementById('cardNo').value.replace(/\s/g, '');
+        const cardTypeElement = document.getElementById('cardType');
+        const cardIcon = document.getElementById('cardIcon');
+        const cardType = getCardType(cardNumber);
+
+        if (cardType) {
+            cardTypeElement.textContent = cardType;
+            cardIcon.className = getCardIconClass(cardType);
+        } else {
+            cardTypeElement.textContent = '';
+            cardIcon.className = '';
+        }
+    }
+
+    function getCardType(number) {
+        const cards = [
+            { name: 'Visa', prefixes: /^4/ },
+            { name: 'MasterCard', prefixes: /^5[1-5]/ },
+            { name: 'DinersClub', prefixes: /^3[6|8]/ },
+            { name: 'CarteBlanche', prefixes: /^30[0-5]/ },
+            { name: 'AmEx', prefixes: /^3[4|7]/ },
+            { name: 'Discover', prefixes: /^6(?:011|4[4-9]|5)/ },
+            { name: 'JCB', prefixes: /^(?:2131|1800|35)/ },
+            { name: 'enRoute', prefixes: /^(?:2014|2149)/ },
+            { name: 'Solo', prefixes: /^(?:6334|6767)/ },
+            { name: 'Switch', prefixes: /^(?:4903|4905|4911|4936|633110|564182|6333|6759)/ },
+            { name: 'Maestro', prefixes: /^(?:5018|5020|5038|6304|6759|676[1-3])/ },
+            { name: 'VisaElectron', prefixes: /^(?:4026|417500|4508|4844|4913|4917)/ },
+            { name: 'LaserCard', prefixes: /^(?:6304|6706|6771|6709)/ }
+        ];
+
+        for (const card of cards) {
+            if (card.prefixes.test(number)) {
+                return card.name;
+            }
+        }
+        return null;
+    }
+
+    function getCardIconClass(cardType) {
+        const cardIcons = {
+            'Visa': 'fab fa-cc-visa',
+            'MasterCard': 'fab fa-cc-mastercard',
+            'DinersClub': 'fab fa-cc-diners-club',
+            'CarteBlanche': 'fas fa-credit-card',
+            'AmEx': 'fab fa-cc-amex',
+            'Discover': 'fab fa-cc-discover',
+            'JCB': 'fab fa-cc-jcb',
+            'enRoute': 'fas fa-credit-card',
+            'Solo': 'fas fa-credit-card',
+            'Switch': 'fas fa-credit-card',
+            'Maestro': 'fab fa-cc-maestro',
+            'VisaElectron': 'fas fa-credit-card',
+            'LaserCard': 'fas fa-credit-card'
+        };
+
+        return cardIcons[cardType] || '';
+    }
+
+    // Function to validate credit card number using Luhn's algorithm
+    const validateCardNumber = number => {
+        // Check if the number contains only numeric value and is between 13 to 19 digits
+        const regex = new RegExp("^[0-9]{13,19}$");
+        if (!regex.test(number)) {
+            return false;
+        }
+
+        return luhnCheck(number);
+    }
+
+    // Function to perform Luhn's algorithm check
+    const luhnCheck = val => {
+        let checksum = 0; // running checksum total
+        let j = 1; // takes value of 1 or 2
+
+        // Process each digit one by one starting from the last
+        for (let i = val.length - 1; i >= 0; i--) {
+            let calc = Number(val.charAt(i)) * j;
+
+            // If the result is in two digits, add 1 to the checksum total
+            if (calc > 9) {
+                checksum = checksum + 1;
+                calc = calc - 10;
+            }
+
+            checksum = checksum + calc;
+            j = j === 1 ? 2 : 1; // Switch the value of j
+        }
+
+        // Check if the checksum is divisible by 10
+        return (checksum % 10) === 0;
+    }
+
+    function validateCVV(cvv) {
+        // Implement your validation logic for CVV here
+        const regex = /^[0-9]{3,4}$/;
+        return regex.test(cvv);
+    }
+
+    function validatePaymentForm() {
+        // Trigger the validation on all fields when form is submitted
+        validateCardNoInput();
+        validateCardNameInput();
+        validateExpDateInput();
+        validateCVVInput();
+
+        const cardNoMessage = document.getElementById('cardNoMessage').textContent;
+        const cardNameMessage = document.getElementById('cardNameMessage').textContent;
+        const expDateMessage = document.getElementById('expDateMessage').textContent;
+        const cvvMessage = document.getElementById('cvvMessage').textContent;
+
+        if (cardNoMessage || cardNameMessage || expDateMessage || cvvMessage) {
+            return false; // Prevent form submission if there are validation errors
+        }
+        return true; // Allow form submission if all validations pass
+    }
+    function maskCardNumber(cardNumber) {
+        if (cardNumber.length < 8) {
+            return cardNumber; // Not enough digits to mask
+        }
+        return `${cardNumber.slice(0, 4)}${'*'.repeat(cardNumber.length - 8)}${cardNumber.slice(-4)}`;
+    }
+    const form = document.getElementById('paymentForm');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Validate form fields
+        if (!validatePaymentForm()) {
+            return; // Exit if form validation fails
+        }
+        const cardNumber = document.getElementById('cardNo').value.replace(/\s/g, '');
+        // Collect form data manually
+        const formData = {
+            cardName: document.getElementById('cardName').value.trim(),
+            cardType: getCardType(cardNumber),
+            cardNo: maskCardNumber(cardNumber),
+            expDate: document.getElementById('expDate').value.trim(),
+        };
+        // Send form data to server using fetch
+        fetch('/insur/submitPayment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle successful response
+                console.log('Form data successfully submitted:', data);
+                window.location.href = '/paymentsuccess'; // Redirect to success page
+                // Optionally, reset the form
+                //form.reset();
+            })
+            .catch(error => {
+                // Handle error
+                console.error('Error while submitting form:', error);
+                // Optionally, display error message to user
+            });
+    });
+</script>

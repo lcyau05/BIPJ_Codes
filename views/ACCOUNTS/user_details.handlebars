@@ -1,0 +1,43 @@
+<style>
+    /* Add your CSS styles here */
+    .container-fluid {
+        text-align: center;
+    }
+
+    .column {
+        display: inline-block;
+        vertical-align: top;
+        margin: 10px;
+        width: 45%;
+    }
+
+    label,
+    .button {
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+{{#if user}}
+<div class="container-fluid bg-light about py-5">
+    <div class="about-item-content bg-white rounded p-5 h-100">
+        <h2>User Details Page</h2><br>
+        <div class="row">
+            <div class="column">
+                <h4>First Name: {{first_name}}</h4>
+                <h4>Gender: {{gender}}</h4>
+                <h4>NRIC (Last 4 digits): {{nric}}</h4>
+                <h4>Phone No: {{phone_no}}</h4>
+                <h4>Postal Code: {{postal_code}}</h4>
+                <a href="/logout" class="btn">Logout</a>
+            </div>
+            <div class="column">
+                <h4>Last Name: {{last_name}}</h4>
+                <h4>Date Of Birth: {{formatDate DOB 'DD MMM YYYY'}}</h4>
+                <h4>Email: {{email}}</h4>
+                <h4>Address: {{address}}</h4>
+                <a href="/user_update" class="btn">Update Profile</a>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}

@@ -1,0 +1,166 @@
+<style>
+#result-title {
+    text-align: center;
+    color: #333;
+}
+
+.result-box {
+    background-color: #e9ecef;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.result-box h2 {
+    margin-top: 0;
+    color: #555;
+}
+
+.mental-health {
+    border-left: 5px solid #5bc0de;
+}
+
+.physical-health {
+    border-left: 5px solid #5cb85c;
+}
+
+.button-wrapper {
+    text-align: center;
+    margin-top: 20px; /* Adjust spacing from the content above */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+
+<div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">ASSESSMENT RESULTS</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- HELPS US GET TO UNDERSTAND 
+                    YOU BETTER -</h6>
+            </div>
+        </div>
+    </div>
+<body>
+<div class="container result">
+        <div class="result-box mental-health">
+            <h2>Mental Health Status</h2>
+            <p>Risk: {{mhScore}}%</p>
+            <p id="mhMessage">{{mhMessage}}</p>
+        </div>
+
+        <div class="result-box physical-health">
+            <h2>Physical Health Status</h2>
+            <p>Risk: {{pscore}}%</p>
+            <p id="pMessage">{{pMessage}}</p>
+        </div>
+</div>
+<div class="button-wrapper">
+    <button id="download-pdf" class="btn btn-primary">Download PDF</button>
+    <button id="redirect-button" class="btn-secondary">Next</button>
+</div>
+<br>
+</body>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const { jsPDF } = window.jspdf;
+        const html2canvas = window.html2canvas;
+
+        document.getElementById('download-pdf').addEventListener('click', () => {
+            const container = document.querySelector('.result');
+
+            html2canvas(container, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4'); // Portrait orientation, mm units, A4 size
+                const imgWidth = 190; // Width with margins
+                const pageHeight = 285; // Height with margins
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                // Add logo image (use Base64 encoded image for simplicity)
+                const logoUrl = 'img/genwise_bipj.png'; // Path to your logo image
+                pdf.addImage(logoUrl, 'PNG', 10, 10, 20, 20); // Adjust the position and size as needed
+
+                // Add company details section
+                pdf.setFontSize(18);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('GenWise', 35, 20); // Adjust the position to align with the logo
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Ang Mo Kio Avenue 1 Block 21', 35, 26);
+                pdf.text('Singapore (231021)', 35, 31);
+                pdf.text('Phone: (65) 9876 3649', 35, 36);
+                pdf.text('Email: genwise@gmail.com', 35, 41);
+                
+                // Add header to the first page
+                pdf.setFontSize(18);
+                pdf.setFont('Helvetica', 'bold');
+                pdf.text('Assessment Results', 105, 50, { align: 'center' });
+
+                // Add the first image
+                pdf.addImage(imgData, 'PNG', 10, 60, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // Add additional pages if needed
+                while (heightLeft >= 0) {
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                    position = heightLeft - imgHeight;
+                }
+
+                // Add footer
+                pdf.setFontSize(10);
+                pdf.setFont('Helvetica', 'normal');
+                pdf.text('Generated GenWise', 105, pdf.internal.pageSize.height - 10, { align: 'center' });
+
+                // Add date
+                const date = new Date();
+                const formattedDate = date.toLocaleDateString();
+                pdf.text(`Date: ${formattedDate}`, 10, pdf.internal.pageSize.height - 10);
+
+                // Save the PDF
+                pdf.save('assessment-results.pdf');
+            }).catch(error => {
+                console.error('Error generating PDF:', error);
+                alert('Failed to generate PDF. Please try again.');
+            });
+        });
+    document.getElementById('redirect-button').addEventListener('click', () => {
+            // Replace '/nextPage' with the actual path to the next Handlebars page
+            window.location.href = '/nutrition';
+        });
+});
+</script>

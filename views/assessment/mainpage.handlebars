@@ -1,0 +1,311 @@
+<style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .rectangle-16,
+        .rectangle-16 * {
+            box-sizing: border-box;
+        }
+
+        .rectangle-16 {
+            background: #fad676;
+            height: 94px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .headerinfo {
+            text-align: center;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .form-container {
+            width: 80%;
+            max-width: 600px; /* Adjust width as needed */
+            margin: 20px auto; /* Center align and provide space */
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-button {
+            background-color: #d68a27;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        .form-button:hover {
+            background-color: #b1690a; /* Darker shade on hover */
+        }
+
+        .next-button {
+            background-color: #ABEFA5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        .next-button:hover {
+            background-color: #36d627; /* Darker shade on hover */
+        }
+
+
+        .form-actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: #FF4003;
+            color: #white;
+        }
+
+        .back-button:hover {
+            background-color: #bd3609;
+        }
+
+        .clear-button {
+            background-color: #e60a0af1;
+        }
+
+        .clear-button:hover {
+            background-color: #b47b0a;
+        }
+
+        .form-radio-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">PERSONALIZED ASSESSMENT - BASIC</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- HELPS US GET TO UNDERSTAND 
+                    YOU BETTER -</h6>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-container">
+        <form id="basicForm" action="/physicalhealth" method="post">
+            <div class="form-field">
+                <label for="ageGroup" class="form-label">What is your current age group?</label>
+                <div class="form-radio-group" id="ageGroup">
+                    <label class="form-radio-label">
+                        <input type="radio" name="ageGroup" value="1227" required> 12-27
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="ageGroup" value="2843" required> 28-43
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="ageGroup" value="4459" required> 44-59
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="ageGroup" value="6078" required> 60-78
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="ageGroup" value="7996" required> 79-96
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="rsStatus" class="form-label">What is your current relationship status?</label>
+                <div class="form-radio-group" id="rsStatus">
+                    <label class="form-radio-label">
+                        <input type="radio" name="rsStatus" value="single" required> Single
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="rsStatus" value="married" required> Married
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="rsStatus" value="widowed" required> Widowed
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="rsStatus" value="divorced" required> Divorced
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="rsStatus" value="separated" required> Separated
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="income" class="form-label">What is your annual income?</label>
+                <div class="form-radio-group" id="income">
+                    <label class="form-radio-label">
+                        <input type="radio" name="income" value="0" required> 0
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="income" value="25" required> Less than 25k
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="income" value="2550" required> 25k-50k
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="income" value="5175" required> 51k-75k
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="income" value="75" required> More than 75k
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="dependants" class="form-label">Do you have any dependants?</label>
+                <div class="form-radio-group" id="dependants">
+                    <label class="form-radio-label">
+                        <input type="radio" name="dependants" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="dependants" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="vehicle" class="form-label">Do you own any vehicle?</label>
+                <div class="form-radio-group" id="vehicle">
+                    <label class="form-radio-label">
+                        <input type="radio" name="vehicle" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="vehicle" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="height" class="form-label">Height</label>
+                <textarea id="height" name="height" class="form-input" rows="1"></textarea>
+            </div>
+
+            <div class="form-field">
+                <label for="weight" class="form-label">Weight</label>
+                <textarea id="weight" name="weight" class="form-input" rows="1"></textarea>
+            </div>
+
+            <div class="form-field">
+                <label for="goals" class="form-label">Do you have any Long-Term or Short-Term goals?</label>
+                <div class="form-radio-group" id="goals">
+                    <label class="form-radio-label">
+                        <input type="radio" name="goals" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="goals" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="sgoals" class="form-label">Do you know what kind of goals is suitable for your age?</label>
+                <div class="form-radio-group" id="sgoals">
+                    <label class="form-radio-label">
+                        <input type="radio" name="sgoals" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="sgoals" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="next-button" onclick="goToNextPage()">Next</button>
+                <button type="button" class="form-button" onclick="clearForm()">Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+
+        function validateForm() {
+        const height = document.getElementById('height').value.trim();
+        const weight = document.getElementById('weight').value.trim();
+        const numberRegex = /^\d*\.?\d*$/;
+
+        if (height === '' || !numberRegex.test(height)) {
+            alert('Please enter a valid number for height');
+            return false;
+        }
+
+        if (weight === '' || !numberRegex.test(weight)) {
+            alert('Please enter a valid number for weight');
+            return false;
+        }
+
+        return true;
+    }
+        // JavaScript functions for button actions
+        function clearForm() {
+            document.getElementById('basicForm').reset(); // Reset form fields
+        }
+
+        function goBack() {
+            window.history.back(); // Go back to previous page
+        }
+
+        function goToNextPage() {
+            console.log('goToNextPage called');
+            const form = document.getElementById('basicForm');
+            const formData = new FormData(form);
+            for (const [key, value] of formData.entries()) {
+                console.log(`Saving ${key} = ${value}`);
+                localStorage.setItem(key, value);
+                }
+            window.location.href = '/physicalhealth';
+        }
+
+        // Optional: Add event listeners for real-time validation
+    document.getElementById('height').addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+    });
+
+    document.getElementById('weight').addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+    });
+    </script>

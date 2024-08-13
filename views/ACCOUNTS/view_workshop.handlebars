@@ -1,0 +1,128 @@
+<head>
+    <style>
+        .container {
+            width: 1400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-icon {
+            font-size: 24px;
+        }
+
+        .search-bar {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .workshop-card {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .workshop-details {
+            margin-bottom: 10px;
+        }
+
+        .workshop-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .workshop-action-button {
+            background-color: #ff6961;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        .workshop-action-button:hover {
+            background-color: #ff4d44;
+            cursor: pointer;
+        }
+
+        .create-button {
+            display: block;
+            margin: 20px auto;
+            background-color: #4CAF50;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .create-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Manage Workshops</h1>
+        </div>
+        <div class="user-info">
+            <div class="user-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div>
+                Welcome Back, Admin!
+            </div>
+            <div>
+                <input type="text" class="search-bar" placeholder="Search">
+                <button class="search-button">Search</button>
+            </div>
+        </div>
+        <div class="main-content">
+            {{#if workshops}}
+            {{#each workshops}}
+            <div class="workshop-card">
+                <h3>{{workshop_title}}</h3>
+                <div class="workshop-details">
+                    <p>Workshop ID: {{id}}</p>
+                    <p>Workshop Category: {{workshop_category}}</p>
+                    <p>Organizer: {{workshop_organizer}}</p>
+                    <p>Date: {{formatDate workshop_date 'DD MMM YYYY'}}</p>
+                    <p>Venue: {{workshop_venue}}</p>
+                    <p>Participants Limit: {{workshop_participants_limit}}</p>
+                    <div class="workshop-actions">
+                        <a action="/update_workshop" method="post" href="/update_workshop/{{id}}"
+                            class="workshop-action-button">Update Workshop</a>
+                        <a action="/user/delete_workship?_method=PUT" method="post" href="/user/delete_workshop/{{id}}"
+                            class="workshop-action-button" data-toggle="confirmation"
+                            data-title="Confirm Cancel?">Cancel Workshop</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            <h1>No workshops found</h1>
+            {{/if}}
+        </div>
+        <a href="/create_workshop" class="btn">Create Workshop</a>
+    </div>
+    </div>
+</body>
