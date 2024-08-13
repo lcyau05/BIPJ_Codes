@@ -1,0 +1,232 @@
+{{#ifEquals role 'Admin'}}
+<button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; margin-right: 10px;"
+    onclick="admintab('Accounts')">Acccounts</button>
+<button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; width: auto;"
+    onclick="admintab('Sales')">Sales</button><br><br>
+
+<div id="Accounts" class="admin">
+    <h1>Admin Dashboard</h1>
+    <div class="chart-grid">
+        <div class="chart-container">
+            <canvas id="genderChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="growthChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="exampleChart1"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="exampleChart2"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<div id="Sales" class="admin">
+    <h1>Sales Chart</h1>
+    <div style="width: 90%; height: 80% margin: auto;">
+        <canvas id="salesChart"></canvas>
+    </div>
+
+    <h1>Sales by Plan Chart</h1>
+    <div style="width: 90%; height: 80% margin: auto;">
+        <canvas id="salesPlanChart"></canvas>
+    </div>
+</div>
+{{/ifEquals}}
+<script>
+    function admintab(department) {
+        var i;
+        var x = document.getElementsByClassName("admin");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(department).style.display = "block";
+    }
+
+    fetch('/sales-data')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.dates,
+                    datasets: [{
+                        label: 'Sales',
+                        data: data.totals,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+
+    fetch('/sales-by-plan')
+        .then(response => response.json())
+        .then(data => {
+            const groupedData = data.reduce((acc, item) => {
+                const key = `${item.planCategory}-${item.planName}`;
+                if (!acc[key]) {
+                    acc[key] = {
+                        label: `${item.planCategory} - ${item.planName}`,
+                        data: [],
+                        backgroundColor: getRandomColor(),
+                        borderColor: getRandomColor(),
+                        borderWidth: 1
+                    };
+                }
+                acc[key].data.push({
+                    x: new Date(item.month), // Convert to Date object
+                    y: parseFloat(item.totalSales)
+                });
+                return acc;
+            }, {});
+
+            const datasets = Object.values(groupedData);
+
+            const ctx = document.getElementById('salesPlanChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    datasets: datasets
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'month'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Total Sales'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': $' + context.parsed.y.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching sales data:', error));
+
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+</script>
+
+<script>
+    const chartData = {{{ json data }}}; // Pass data to client-side script
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctxGender = document.getElementById('genderChart').getContext('2d');
+        const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+        const ctxLogin = document.getElementById('loginChart').getContext('2d');
+        const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+
+        // Gender Chart
+        new Chart(ctxGender, {
+            type: 'pie',
+            data: {
+                labels: chartData.genderData.map(item => item.gender),
+                datasets: [{
+                    label: 'Gender Distribution',
+                    data: chartData.genderData.map(item => item.count),
+                    backgroundColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Growth Chart
+        new Chart(ctxGrowth, {
+            type: 'line',
+            data: {
+                labels: chartData.growthData.map(item => item.day),
+                datasets: [{
+                    label: 'User Growth',
+                    data: chartData.growthData.map(item => item.count),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Login Chart
+        new Chart(ctxLogin, {
+            type: 'line',
+            data: {
+                labels: chartData.loginData.map(item => item.day),
+                datasets: [{
+                    label: 'User Logins',
+                    data: chartData.loginData.map(item => item.count),
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+        // Workshop Categories Chart
+
+        const categoryColors = [
+            'rgba(255, 159, 64, 1)',    // Orange
+            'rgba(54, 162, 235, 1)',    // Blue
+            'rgba(255, 99, 132, 1)',    // Red
+            'rgba(75, 192, 192, 1)'     // Green
+        ];
+
+        new Chart(ctxCategory, {
+            type: 'bar',
+            data: {
+                labels: chartData.categoryData.map(item => item.workshop_category),
+                datasets: [{
+                    label: 'Number of Workshops',
+                    data: chartData.categoryData.map(item => item.count),
+                    backgroundColor: categoryColors,
+                    borderColor: categoryColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>

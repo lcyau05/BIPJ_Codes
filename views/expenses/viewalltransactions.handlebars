@@ -1,0 +1,537 @@
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .container-viewall,
+    .container-viewcategory,
+    .container-view-update {
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 1100px;
+        overflow: hidden;
+    }
+
+    .container h3 {
+        font-size: 1.5rem;
+        color: #333333;
+        margin-bottom: 15px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        table-layout: fixed;
+        font-size: 14px;
+    }
+
+    table th,
+    table td {
+        padding: 15px;
+        text-align: left;
+        border: 1px solid #dddddd;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table th {
+        background-color: #f0f0f0;
+        color: #555555;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 13px;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table tbody tr:hover {
+        background-color: #e6f7ff;
+        transition: background-color 0.3s ease;
+    }
+
+    table tbody td.income {
+        background-color: #dcedc8;
+        color: #006400;
+    }
+
+    table tbody td.expense {
+        background-color: #ffcdd2;
+        color: #8b0000;
+    }
+
+    .container h5.no-transactions {
+        font-size: 1.2rem;
+        color: #888888;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+        table th,
+        table td {
+            padding: 12px;
+        }
+    }
+
+    .action-btn {
+        padding: 8px 15px;
+        font-size: 12px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        color: white;
+        width: 80px;
+        text-align: center;
+        margin-right: 5px;
+    }
+
+    .update-btn {
+        background-color: #ebca5f;
+    }
+
+    .update-btn:hover {
+        background-color: #bea243;
+        transform: scale(1.05);
+    }
+
+    .delete-btn {
+        background-color: #ff4d4d;
+    }
+
+    .delete-btn:hover {
+        background-color: #cc0000;
+        transform: scale(1.05);
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .filters {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .filter-label {
+        margin-right: 5px;
+        font-size: 14px;
+    }
+
+    .filter-select,
+    .filter-input {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .view-all-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 1em;
+        color: #fff;
+        background-color: #5f5f5f;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .view-all-button:hover {
+        background-color: #2b2929;
+    }
+
+    .form-container {
+        width: 80%;
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-field {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    #transaction-count {
+        font-size: 1.2rem;
+        color: #333333;
+        margin-bottom: 15px;
+    }
+</style>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">MANAGE YOUR OWN EXPENSES</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- VIEW ALL -</h6>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-viewcategory">
+        <h3>Categorised Expenses</h3>
+        <div style="margin-bottom: 15px; font-size: 1.2rem; color: #333;">For All Transactions Made</div>
+        <table id="transactionsTableCategory" border="1">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each categorizedExpenses}}
+                <tr>
+                    <td>{{category}}</td>
+                    <td>{{amount}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container-viewall">
+        {{#if expenses}}
+        <h3>All Transactions</h3>
+        <div id="transaction-count" style="margin-bottom: 15px; font-size: 1.2rem; color: #333;">Number of Transactions:
+            0</div>
+        <div class="filters">
+            <div>
+                <label class="filter-label" for="transactionTypeFilter">Transaction Type:</label>
+                <select id="transactionTypeFilter" class="filter-select">
+                    <option value="">All</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+            <div>
+                <label class="filter-label" for="categoryFilter">Category:</label>
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">All</option>
+                    <option value="transfer">Transfer</option>
+                    <option value="dining">Dining</option>
+                    <option value="transportation">Transportation</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="accommodation">Accommodation</option>
+                    <option value="entertainment">Entertainment and Leisure</option>
+                    <option value="others">Others</option>
+                </select>
+            </div>
+            <div>
+        <label class="filter-label" for="descriptionFilter">Search by Description:</label>
+        <input type="text" id="descriptionFilter" class="filter-input" placeholder="Enter description...">
+    </div>
+        </div>
+        <table id="transactionsTable" border="1">
+            <thead>
+                <tr>
+                    <th>Transaction Type</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Transaction Date</th>
+                    <th>Description</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each expenses}}
+                <tr>
+                    <td class="{{transactionType}}">{{transactionType}}</td>
+                    <td>{{category}}</td>
+                    <td>{{amount}}</td>
+                    <td>{{formatDate transactionDate 'DD-MM-YYYY'}}</td>
+                    <td>{{description}}</td>
+                    <td>
+                        <div class="button-group">
+                            <button type="button" class="action-btn update-btn"
+                                onclick="showUpdateForm('{{id}}', '{{description}}')">
+                                Update
+                            </button>
+                            <button type="button" class="action-btn delete-btn" onclick="deleteTransaction('{{id}}')">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <h5 class="no-transactions">No Transactions Made</h5>
+        {{/if}}
+
+        <button type="button" class="view-all-button" onclick="window.location.href='/expensesdashboard'">
+            Return To Dashboard
+        </button>
+        <button onclick="downloadTransactionsAsPDF()" class="view-all-button" style="margin-top: 20px;">Download as PDF</button>
+    </div>
+
+    <div class="container-view-update">
+        <div id="update-form" style="display: none;">
+            <h3>Update Descriptions</h3>
+            <form action="/expenses/updateExpenses" method="POST">
+                <input type="hidden" id="update-id" name="id">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-input" rows="3"></textarea>
+                <br>
+
+                <div class="button-group">
+                    <button type="submit" class="action-btn update-btn">
+                        Update
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <br>
+
+    <script>
+        // Runs only after HTML document has been fully loaded 
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTransactionCount(); 
+        });
+
+        function updateTransactionCount() {
+            // Selects all <tr> elements inside the <tbody> of the table with the ID transactionsTable
+            const rows = document.querySelectorAll('#transactionsTable tbody tr');
+            // Count how mnay rows in the table 
+            const count = rows.length;
+            // Display the total transactions at the HTML elememt with the ID transaction-count
+            document.getElementById('transaction-count').textContent = `Total Transactions: ${count}`;
+        }
+
+        // addEventListener are triggered whenever the value of the filter changes 
+        // E.g, user selects a different option 
+        // When the filter changes, it calls filterTransaction to apply new filter criteria to the transactions and updates the transaction count
+        document.getElementById('transactionTypeFilter').addEventListener('change', () => {
+            filterTransactions();
+            updateTransactionCount();
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', () => {
+            filterTransactions();
+            updateTransactionCount();
+        });
+
+        document.getElementById('descriptionFilter').addEventListener('input', filterTransactions);
+
+        function filterTransactions() {
+            // Store the current selected values from the respective filter dropdowns
+            const transactionType = document.getElementById('transactionTypeFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            const description = document.getElementById('descriptionFilter').value.trim().toLowerCase();
+
+            // Selects all <tr> elements inside the <tbody> of the table with the ID transactionsTable
+            const rows = document.querySelectorAll('#transactionsTable tbody tr');
+
+            rows.forEach(row => {
+                // Extract the text content from the first and second column of the row (transactionType, category)
+                // .trim is to remove whitespace from both ends of the string 
+                const type = row.querySelector('td:nth-child(1)').textContent.trim();
+                const cat = row.querySelector('td:nth-child(2)').textContent.trim();
+                const desc = row.querySelector('td:nth-child(5)').textContent.trim().toLowerCase();
+
+                // === is a strict equality operator, compare the two values, and type
+                let typeMatch = transactionType === "" || type.toLowerCase() === transactionType.toLowerCase();
+                let categoryMatch = category === "" || cat.toLowerCase() === category.toLowerCase();
+                const descriptionMatch = description === "" || desc.includes(description);
+
+
+                if (typeMatch && categoryMatch && descriptionMatch) {
+                    // if both conditions are met
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        function showUpdateForm(id, description) {
+            document.getElementById('update-form').style.display = 'block';
+            document.getElementById('update-id').value = id;
+            document.getElementById('description').value = description;
+        }
+
+        function deleteTransaction(id) {
+            if (confirm("Are you sure you want to delete this transaction?")) {
+                fetch(`/delete/${id}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                            alert("Transaction deleted successfully");
+                        } else {
+                            alert("Failed to delete the transaction");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("An error occurred while deleting the transaction");
+                    });
+            }
+        }
+
+async function downloadTransactionsAsPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add JourneyJunction logo
+    const logoUrl = 'img/genwise_bipj.png'; // Path to your logo image
+    const logo = await loadImage(logoUrl);
+    doc.addImage(logo, 'PNG', 10, 10, 20, 20); // Adjust the position and size as needed
+
+    // Company details section
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('GenWise', 35, 20); // Adjust the position to align with the logo
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Ang Mo Kio Avenue 1 Block 21', 35, 26);
+    doc.text('Singapore (231021)', 35, 31);
+    doc.text('Phone: (65) 9876 3649', 35, 36);
+    doc.text('Email: genwise@gmail.com', 35, 41);
+
+    // Add a horizontal line for separation
+    doc.setLineWidth(0.5);
+    doc.line(10, 50, 200, 50);
+
+    // Statement title and date
+    doc.setFontSize(14);
+    doc.text('Statement of Account', 10, 60);
+    doc.setFontSize(10);
+    doc.text('Date: ' + new Date().toLocaleDateString(), 150, 60);
+
+    // Categorised Transactions Section
+    const categorizedTable = document.getElementById('transactionsTableCategory');
+    const categorizedHeaders = Array.from(categorizedTable.querySelectorAll('th')).map(header => header.innerText);
+    const categorizedRows = Array.from(categorizedTable.querySelectorAll('tbody tr')).map(row => Array.from(row.querySelectorAll('td')).map(cell => cell.innerText));
+
+    doc.setFontSize(12);
+    doc.text('Summary of the expenses based on categories', 10, 70);
+    doc.autoTable({
+        head: [categorizedHeaders],
+        body: categorizedRows,
+        startY: 75,
+        margin: { left: 10, right: 10 },
+        theme: 'striped',
+        headStyles: {
+            fillColor: '#ffcdd2',
+            textColor: [255, 255, 255],
+            fontStyle: 'bold',
+            fontSize: 10
+        },
+        alternateRowStyles: {
+            fillColor: [240, 240, 240]
+        },
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 10,
+            cellPadding: 5,
+            textColor: [0, 0, 0],
+            font: 'helvetica'
+        }
+    });
+
+    // Space for the next section
+    let yOffset = doc.autoTable.previous.finalY + 20;
+    doc.setFontSize(12);
+    doc.text('Detailed Transaction History', 10, yOffset);
+    yOffset += 10;
+
+    const allTable = document.getElementById('transactionsTable');
+    const allHeaders = Array.from(allTable.querySelectorAll('th')).map(header => header.innerText).slice(0, -1);
+    const allRows = Array.from(allTable.querySelectorAll('tbody tr')).map(row => Array.from(row.querySelectorAll('td')).map(cell => cell.innerText).slice(0, -1));
+
+    doc.autoTable({
+        head: [allHeaders],
+        body: allRows,
+        startY: yOffset,
+        margin: { left: 10, right: 10 },
+        theme: 'striped',
+        headStyles: {
+            fillColor: '#ffcdd2',
+            textColor: [255, 255, 255],
+            fontStyle: 'bold',
+            fontSize: 10
+        },
+        alternateRowStyles: {
+            fillColor: [240, 240, 240]
+        },
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 10,
+            cellPadding: 5,
+            textColor: [0, 0, 0],
+            font: 'helvetica'
+        }
+    });
+
+    // Footer with Page number
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(10);
+        doc.text(`Page ${i} of ${totalPages}`, 10, doc.internal.pageSize.height - 10);
+    }
+
+    doc.save('statement_of_account.pdf');
+}
+
+// Helper function to load an image
+function loadImage(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous'; // To avoid CORS issues
+        img.onload = () => resolve(img);
+        img.onerror = (err) => reject(err);
+        img.src = url;
+    });
+}
+
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>

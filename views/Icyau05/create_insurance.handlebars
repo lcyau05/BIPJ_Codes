@@ -1,0 +1,238 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">- INSURANCE CREATION -</h6>
+            <h1 class="mb-5">CREATE INSURANCE PLAN</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <form id="insuranceForm" action="">
+        <label for="typeOfInsurance">Type of Insurance</label>
+        <select id="typeOfInsurance" name="typeOfInsurance" required>
+            <option value="" disabled selected>Select</option> <!-- Null value option -->
+            <option value="Car">Car</option>
+            <option value="Home">Home</option>
+            <option value="Life">Life</option>
+            <option value="Medical">Medical</option>
+            <option value="Travel">Travel</option>
+        </select>
+        <br><br>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="name" placeholder="Name" required>
+            <label for="name">Insurance Plan Name</label>
+        </div>
+        <div class="feature-group">
+            <h5>Feature 1</h5>
+            <div class="row g-3 feature-item">
+                <div class="row g-3">
+                    <div class="col-lg-12 col-xl-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="featureName1" placeholder="Feature Name">
+                            <label for="featureName1">Feature Name</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-xl-6">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="cost1" placeholder="Feature Cost" min="0">
+                            <label for="cost1">Feature Cost ($)</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Feature Description" id="description1"
+                                style="height: 120px"></textarea>
+                            <label for="description1">Description</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <input type="button" value="Add" onclick="addFeature()"
+            style="background-color: #FD8087; color: white; border:0; border-radius: 25px; padding: 10px 24px;" />
+        <div class="optional-group">
+            <h5>Optional - Feature 1</h5>
+            <div class="row g-3 option-item">
+                <div class="row g-3">
+                    <div class="col-lg-12 col-xl-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="optionalName1" placeholder="Feature Name">
+                            <label for="optionalName1">Feature Name</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-xl-6">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="optionalCost1" placeholder="Feature Cost"
+                                min="0">
+                            <label for="optionalCost1">Feature Cost ($)</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Feature Description" id="optionalDescription1"
+                                style="height: 120px"></textarea>
+                            <label for="optionalDescription1">Description</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="button" value="Add" onclick="addOption()"
+            style="background-color: #FD8087; color: white; border:0; border-radius: 25px; padding: 10px 24px;" />
+        <br><br>
+        <div class="col-12">
+            <button class="btn btn-primary w-100 py-3" type="submit">Create</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('insuranceForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Initialize isValid variable
+        let isValid = true;
+
+        // Collect form data into an object
+        const data = {
+            typeOfInsurance: document.getElementById('typeOfInsurance').value,
+            name: document.getElementById('name').value,
+            featureName: [],
+            cost: [],
+            description: [],
+            optionalName: [],
+            optionalCost: [],
+            optionalDescription: []
+        };
+
+        // Validate and collect feature data
+        document.querySelectorAll('.feature-item').forEach((featureItem) => {
+            const featureName = featureItem.querySelector('input[id^="featureName"]').value;
+            const cost = featureItem.querySelector('input[id^="cost"]').value;
+            const description = featureItem.querySelector('textarea[id^="description"]').value;
+
+            if (featureName || cost || description) {
+                // If any of the fields are filled, check if all are filled
+                if (featureName && cost && description) {
+                    data.featureName.push(featureName);
+                    data.cost.push(cost);
+                    data.description.push(description);
+                } else {
+                    isValid = false;
+                    alert('Please fill out all fields for each feature.');
+                }
+            }
+        });
+
+        // Validate and collect optional feature data
+        document.querySelectorAll('.option-item').forEach((optionItem) => {
+            const optionalName = optionItem.querySelector('input[id^="optionalName"]').value;
+            const optionalCost = optionItem.querySelector('input[id^="optionalCost"]').value;
+            const optionalDescription = optionItem.querySelector('textarea[id^="optionalDescription"]').value;
+
+            if (optionalName || optionalCost || optionalDescription) {
+                // If any of the fields are filled, check if all are filled
+                if (optionalName && optionalCost && optionalDescription) {
+                    data.optionalName.push(optionalName);
+                    data.optionalCost.push(optionalCost);
+                    data.optionalDescription.push(optionalDescription);
+                } else {
+                    isValid = false;
+                    alert('Please fill out all fields for each optional feature.');
+                }
+            }
+        });
+
+        if (isValid) {
+            // Send the data to the server using fetch
+            fetch('/insur/createInsurance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server error: ${response.status}`);
+                    }
+                    window.location.href = '/insurdashboard'; // Redirect to success page
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`An error occurred while creating the insurance plan: ${error.message}`);
+                });
+        }
+    });
+    let featureCount = 1;
+
+    function addFeature() {
+        featureCount++;
+
+        // Clone the first feature item
+        let newFeature = document.querySelector('.feature-item').cloneNode(true);
+
+        // Update the feature count and IDs
+        newFeature.querySelectorAll('input, textarea').forEach((input) => {
+            let oldId = input.id;
+            let newId = oldId.replace(/\d+$/, '') + featureCount;
+            input.id = newId;
+            input.value = ''; // Clear the value
+            let label = newFeature.querySelector(`label[for="${oldId}"]`);
+            if (label) {
+                label.setAttribute('for', newId);
+            }
+        });
+
+        // Append the new feature to the feature group
+        let featureGroup = document.querySelector('.feature-group');
+        let h5 = document.createElement('h5');
+        h5.textContent = `Feature ${featureCount}`;
+        featureGroup.appendChild(h5);
+        featureGroup.appendChild(newFeature);
+    }
+
+    let optionCount = 1;
+
+    function addOption() {
+        optionCount++;
+
+        // Clone the first option item
+        let newOption = document.querySelector('.option-item').cloneNode(true);
+
+        // Update the option count and IDs
+        newOption.querySelectorAll('input, textarea').forEach((input) => {
+            let oldId = input.id;
+            let newId = oldId.replace(/\d+$/, '') + optionCount;
+            input.id = newId;
+            input.value = ''; // Clear the value
+            let label = newOption.querySelector(`label[for="${oldId}"]`);
+            if (label) {
+                label.setAttribute('for', newId);
+            }
+        });
+
+        // Append the new option to the optional group
+        let optionGroup = document.querySelector('.optional-group');
+        let h5 = document.createElement('h5');
+        h5.textContent = `Optional - Feature ${optionCount}`;
+        optionGroup.appendChild(h5);
+        optionGroup.appendChild(newOption);
+    }
+
+</script>
+<style>
+    .feature-group {
+        padding: 20px 0;
+    }
+
+    .optional-group {
+        padding: 20px 0;
+    }
+
+    h5 {
+        margin-top: 20px;
+        /* Add margin-top to headings for separation */
+    }
+</style>

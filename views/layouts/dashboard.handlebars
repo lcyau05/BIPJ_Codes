@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:slnt,wght@-10..0,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link rel="stylesheet" href="lib/animate/animate.min.css" />
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <title>GenWise</title>
+    <link rel="icon" href="./img/genwise_bipj.png" type="image/x-icon">
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    {{> navbars}}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">USER DASHBOARD</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- VIEW PERSONAL DETAILS -</h6>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="text-align: center; justify-content: space-between; background-color:aliceblue;">
+            <br>
+            <ul>
+                <li class="active" style="padding-bottom: 20px;"><i class="fas fa-solid fa-user"
+                        style="font-size:xx-large; color: #FD8087;"></i>&nbsp
+                    &nbsp User ID:
+                    {{user.id}}<br>Membership: {{role}}{{#ifEquals role 'Ordinary'}}
+                    <br><br><button class="btn btn-primary"
+                        onclick="window.location.href = 'http://localhost:3002/upgrade';">Upgrade</button>
+                    {{/ifEquals}}
+                </li>
+                <li><a href="/user_details">User Details</a></li>
+                <li><a href="/user_bookings">Booking Details</a></li>
+                <li><a href="/answer">Personalised Assessments</a></li>
+                <li><a href="/expensesdashboard">Expenses & Budget Management</a></li>
+                <li><a href="/goalsdashboard">Goals Management</a></li>
+                <li><a href="/insurdashboard">Insurance Plans</a></li>
+                <li><a href="/uservidvouch">Videos & Vouchers</a></li>
+                {{#ifEquals role 'Admin'}}
+                <li><a href="/admindashboard">Admin View</a></li>
+                <li><a href="/user_audits">Users Audit Log</a></li>
+                <li><a href="/email_notifications">Email Broadcast</a></li>
+                <li><a href="/review">Assessment Review</a></li>
+                <li><a href="/nutritionform">Create Nutrition Form</a></li>
+                <li><a href="/nutriDisplay">Nutrition View</a></li>
+                <li><a href="/vidvouch">Admin Videos & Vouchers</a></li>
+                {{/ifEquals}}
+            </ul>
+        </div>
+        <div class="col-10" style="padding-left: 100px;">
+            {{{body}}}
+        </div>
+    </div>
+    {{> footer}}
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+    <style>
+        ul {
+            list-style: none;
+
+            li {
+                position: relative;
+
+                a {
+                    line-height: 20px;
+                    margin: 0 auto;
+                    text-align: center;
+                    text-transform: uppercase;
+                    text-decoration: none;
+                    letter-spacing: 0.4em;
+                    color: rgba(#FFF, 0.35);
+                    display: block;
+                    transition: all ease-out 300ms;
+                    padding: 20px;
+                }
+
+                &.active a {
+                    color: white;
+                }
+
+                &:not(.active)::after {
+                    opacity: 0.2;
+                }
+
+                &:not(.active):hover a {
+                    color: rgba(#FFF, 0.75);
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: 0.2em;
+                    background: black;
+                    left: 0;
+                    bottom: 0;
+                    background-image: linear-gradient(to right, #5e42a6, #b74e91)
+                }
+            }
+        }
+    </style>
+</body>
+
+</html>

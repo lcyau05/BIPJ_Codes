@@ -1,0 +1,373 @@
+<style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .form-container-PA {
+            width: 80%;
+            max-width: 600px; /* Adjust width as needed */
+            margin: 20px auto; /* Center align and provide space */
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-button {
+            background-color: #ABEFA5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        .form-button:hover {
+            background-color: #36d627; /* Darker shade on hover */
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: #FF4003;
+            color: #white;
+        }
+
+        .back-button:hover {
+            background-color: #bd3609;
+        }
+
+        .clear-button {
+            background-color: #f5a300;
+        }
+
+        .clear-button:hover {
+            background-color: #b47b0a;
+        }
+
+        .form-radio-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .red-text {
+            color: #bd3609;
+        }
+
+</style>
+
+<body>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">PERSONALIZED ASSESSMENT - MENTAL HEALTH</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- HELPS US GET TO UNDERSTAND 
+                    YOU BETTER -</h6>
+            </div>
+        </div>
+    </div>
+
+     <div class="form-container-PA">
+        <form id="mentalHealthForm" action="/PAroutes/submission" method="post">
+        <div class="form-field">
+            <label for="stress1" class="form-label">Do you feel stressed frequently?</label>
+            <div class="form-radio-group" id="stress1">
+                <label class="form-radio-label">
+                    <input type="radio" name="stress1" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="stress1" value="no" required> No
+                </label>
+            </div>
+        </div>
+        
+        <div class="form-field">
+            <label for="stress2" class="form-label">Are you confident of managing stress?</label>
+            <div class="form-radio-group" id="stress2">
+                <label class="form-radio-label">
+                    <input type="radio" name="stress2" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="stress2" value="no" required> No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="support" class="form-label">Do you have a support system such as close friends, family you can rely on?</label>
+            <div class="form-radio-group" id="support">
+                <label class="form-radio-label">
+                    <input type="radio" name="support" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="support" value="no" required> No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="sleep" class="form-label">Do you get at least 7-8 hours of sleep regularly?</label>
+            <div class="form-radio-group" id="sleep">
+                <label class="form-radio-label">
+                    <input type="radio" name="sleep" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="sleep" value="no" required> No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="diagnose" class="form-label">Have you been diagnosed with any mental health conditions?</label>
+            <div class="form-radio-group" id="diagnose">
+                <label class="form-radio-label">
+                    <input type="radio" name="diagnose" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="diagnose" value="no" required> No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="isolated" class="form-label">Do you feel isolated or lonely?</label>
+            <div class="form-radio-group" id="isolated">
+                <label class="form-radio-label">
+                    <input type="radio" name="isolated" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="isolated" value="no" required> No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="coping" class="form-label">Are you working towards better emotional regulation and coping skills?</label>
+            <div class="form-radio-group" id="coping">
+                <label class="form-radio-label">
+                    <input type="radio" name="coping" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="coping" value="no" required> No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="feelings" class="form-label">Do you find it easy to talk about your feelings with others?</label>
+            <div class="form-radio-group" id="feelings">
+                <label class="form-radio-label">
+                    <input type="radio" name="feelings" value="yes" required> Yes
+                </label>
+                <label class="form-radio-label">
+                    <input type="radio" name="feelings" value="no" required> No
+                </label>
+            </div>
+        </div>
+
+        <div class="form-field">
+                <label for="activities" class="form-label">Do you participate in social activites regularly?</label>
+                <div class="form-radio-group" id="activities">
+                    <label class="form-radio-label">
+                        <input type="radio" name="activities" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="activities" value="no" required> No
+                    </label>
+                </div>
+            </div>
+
+        <div class="form-field">
+                <label for="useless" class="form-label">I feel I am useless/redundant in this world sometimes.</label>
+                <div class="form-radio-group" id="useless">
+                    <label class="form-radio-label">
+                        <input type="radio" name="useless" value="yes" required> Yes
+                    </label>
+                    <label class="form-radio-label">
+                        <input type="radio" name="useless" value="no" required> No
+                    </label>
+                </div>
+        </div>
+
+        <!-- Hidden fields to include `localStorage` data -->
+        <input type="hidden" id="hidden-ageGroup" name="ageGroup">
+        <input type="hidden" id="hidden-rsStatus" name="rsStatus">
+        <input type="hidden" id="hidden-income" name="income">
+        <input type="hidden" id="hidden-dependants" name="dependants">
+        <input type="hidden" id="hidden-vehicle" name="vehicle">
+        <input type="hidden" id="hidden-height" name="height">
+        <input type="hidden" id="hidden-weight" name="weight">
+        <input type="hidden" id="hidden-goals" name="goals">
+        <input type="hidden" id="hidden-sgoals" name="sgoals">
+        <input type="hidden" id="hidden-aller" name="aller">
+        <input type="hidden" id="hidden-healthscreen" name="healthscreen">
+        <input type="hidden" id="hidden-smoke" name="smoke">
+        <input type="hidden" id="hidden-allergies" name="allergies">
+        <input type="hidden" id="hidden-alchohol" name="alchohol">
+        <input type="hidden" id="hidden-premedic" name="premedic">
+        <input type="hidden" id="hidden-hsreport" name="hsreport">
+        <input type="hidden" id="hidden-bloodpressure" name="bloodpressure">
+        <input type="hidden" id="hidden-headaches" name="headaches">
+        <input type="hidden" id="hidden-chronic" name="chronic">
+        <input type="hidden" id="hidden-injuries" name="injuries">
+        <input type="hidden" id="hidden-heartcond" name="heartcond">
+        <input type="hidden" id="hidden-mhScore" name="mhScore">
+        <input type="hidden" id="hidden-mhcategory" name="mhcategory">
+        <input type="hidden" id="hidden-pscore" name="pscore">
+        <input type="hidden" id="hidden-pcategory" name="pcategory">
+
+
+        <div class="form-actions">
+                <button type="submit" class="form-button">Submit</button>
+        </div>
+    </form>
+    </div>
+
+   <script>
+    // Populate form fields with data from localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('mentalHealthForm');
+        const keys = [
+            'ageGroup', 'rsStatus', 'income', 'dependants', 'vehicle',
+            'height', 'weight', 'goals', 'sgoals', 'aller', 'healthscreen',
+            'smoke', 'alchohol', 'bloodpressure', 'headaches', 'chronic', 'injuries', 'allergies', 'heartcond', 'premedic', 'hsreport'
+        ];
+
+        keys.forEach(key => {
+            const value = localStorage.getItem(key);
+            if (value) {
+                const hiddenInput = document.getElementById(`hidden-${key}`);
+                if (hiddenInput) {
+                    hiddenInput.value = value;
+                    console.log(hiddenInput.value);
+                }
+            }
+        });
+    });
+
+    // Calculate score and set risk category before submitting
+    document.getElementById('mentalHealthForm').addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent form from submitting immediately
+
+        let mhScore = 0;
+        let pscore = 0;
+        const yesPoints = 10;
+
+
+        const questions = ['stress1', 'stress2', 'support', 'sleep', 'diagnose', 'isolated', 'coping', 'feelings', 'activities', 'useless'];
+
+        // Physical Health Questions
+        const phQuestions = ['healthscreen', 'aller', 'smoke', 'alchohol', 'bloodpressure', 'headaches', 'chronic', 'injuries', 'heartcond', 'premedic'];
+
+        // Calculate score based on responses
+        questions.forEach(question => {
+            const selectedInput = document.querySelector(`input[name="${question}"]:checked`);
+            if (selectedInput) {
+                const selectedValue = selectedInput.value;
+
+                // Adjust score based on the answer
+                if (
+                    (question === 'stress1' && selectedValue === 'yes') ||
+                    (question === 'stress2' && selectedValue === 'no') ||
+                    (question === 'support' && selectedValue === 'no') ||
+                    (question === 'sleep' && selectedValue === 'no') ||
+                    (question === 'diagnose' && selectedValue === 'yes') ||
+                    (question === 'isolated' && selectedValue === 'yes') ||
+                    (question === 'coping' && selectedValue === 'no') ||
+                    (question === 'feelings' && selectedValue === 'no') ||
+                    (question === 'activities' && selectedValue === 'no') ||
+                    (question === 'useless' && selectedValue === 'yes')
+                ) {
+                    mhScore += yesPoints;
+                }
+            }
+        });
+
+        // Calculate pscore based on responses
+        phQuestions.forEach(question => {
+            const hiddenInput = document.getElementById(`hidden-${question}`);
+            if (hiddenInput) {
+                const selectedValue = hiddenInput.value;
+
+                if (
+                    (question === 'healthscreen' && selectedValue === 'no') ||
+                    (question === 'aller' && selectedValue === 'yes') ||
+                    (question === 'smoke' && selectedValue === 'yes') ||
+                    (question === 'alchohol' && selectedValue !== 'never') || // Scores if anything other than "never"
+                    (question === 'bloodpressure' && selectedValue === 'yes') ||
+                    (question === 'headaches' && selectedValue === 'yes') ||
+                    (question === 'chronic' && selectedValue === 'yes') ||
+                    (question === 'injuries' && selectedValue === 'yes') ||
+                    (question === 'heartcond' && selectedValue === 'yes') ||
+                    (question === 'premedic' && selectedValue === 'yes')
+                ) {
+                    pscore += yesPoints;
+                }
+            } else {
+                console.log(`Hidden input for question ${question} not found`);
+            }
+        });
+
+        // Logging the final pscore
+        console.log('Final pscore:', pscore);
+
+
+        // Determine risk category based on total score
+        let mhcategory = 'Low Risk';
+        let pcategory = 'Low Risk';
+        if (mhScore >= 30 && mhScore < 70) {
+            mhcategory = 'Moderate Risk';
+        } else if (mhScore >= 70) {
+            mhcategory = 'High Risk';
+        }
+
+        if (pscore >= 30 && pscore < 70) {
+            pcategory = 'Moderate Risk';
+        } else if (pscore >= 70) {
+            pcategory = 'High Risk';
+        }
+
+
+        // Set hidden input values
+        document.getElementById('hidden-mhScore').value = mhScore;
+        document.getElementById('hidden-mhcategory').value = mhcategory;
+        document.getElementById('hidden-pscore').value = pscore;
+        document.getElementById('hidden-pcategory').value = pcategory;
+
+        // Submit the form
+        event.target.submit();
+    });
+</script>

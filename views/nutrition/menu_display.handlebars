@@ -1,0 +1,312 @@
+<style>
+/* General container styling */
+.container {
+    width: 100%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Record count styling */
+.record-count {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+/* Heading styling */
+h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #9f0606; /* Dark red header */
+    color: #f7f2f2; /* White text */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+td {
+    color: #555;
+}
+
+/* Button styling */
+.button {
+    background-color: #e27756; /* Green background */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button:hover {
+    background-color: #c53f2d; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+.button:active {
+    background-color: #8d1111; /* Even darker green when clicked */
+    transform: scale(0.95); /* Slightly shrink the button */
+}
+
+/* Button styling */
+.csv {
+    background-color: #cf9d40; /* Green background */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.csv:hover {
+    background-color: #b37b28; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+.csv:active {
+    background-color: #e78a10; /* Even darker green when clicked */
+    transform: scale(0.95); /* Slightly shrink the button */
+}
+
+.update {
+    background-color: #e7e575; /* Green background */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.update:hover {
+    background-color: #dfd43b; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+.update:active {
+    background-color: #d6b10c; /* Even darker green when clicked */
+    transform: scale(0.95); /* Slightly shrink the button */
+}
+/* Update form styling */
+#update-form {
+    display: none;
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#update-form h3 {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+#update-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+#update-form input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
+
+    table, th, td {
+        font-size: 14px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+</style>
+
+<div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">MENU</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">- DISPLAY 
+                 -</h6>
+            </div>
+        </div>
+    </div>
+<div class="container">
+    {{#if Nutris}}
+        <div class="record-count">
+                Total Menu: {{Nutris.length}}
+        </div>
+        <button class="csv" onclick="exportTableToCSV('menu.csv')">Export to CSV</button>
+        <table border="2">
+            <th>CODE</th>
+            <th>MENU</th>
+            <th>CALORIES</th>
+            <th>DESCRIPTION</th>
+            <th>UPDATE</th>
+            <th>DELETE</th>
+       
+            {{#each Nutris}}
+            <tr>
+                <td>{{foodCode}}</td>
+                <td>{{foodName}}</td>
+                <td>{{calories}}</td>
+                <td>{{description}}</td>
+                <td>
+                    <button class="update" onclick="showUpdateForm('{{id}}', '{{foodCode}}', '{{foodName}}', '{{calories}}', '{{description}}')">Update</button>
+                </td>
+                <td>
+                    <button class="button" onclick="deleteRecord('{{id}}')">Delete</button>
+                </td>
+            </tr>
+            {{/each}}
+        </table>
+    {{else}}
+        <h3>No Records Found</h3>
+    {{/if}}
+</div>
+
+<div id="update-form" style="display: none;">
+            <h3>Update Menu</h3>
+            <form action="/Nutriroutes/updateNutri" method="POST">
+                <input type="hidden" id="update-id" name="id">
+                <label for="update-foodCode">Food Code:</label>
+                <input type="text" id="update-foodCode" name="foodCode" required>
+                <br>
+                <label for="update-foodName">Food Name:</label>
+                <input type="text" id="update-foodName" name="foodName" step="0.01" required>
+                <br>
+                <label for="update-calories">Calories:</label>
+                <input type="text" id="update-calories" name="calories" step="0.01" required>
+                <br>
+                <label for="update-description">Description:</label>
+                <input type="text" id="update-description" name="description" required>
+                <br>
+                <button class="update" type="submit">Update</button>
+                
+            </form>
+</div>
+
+<script>
+    function deleteRecord(id) {
+        if (confirm("Are you sure you want to delete this record?")) {
+                fetch(`/deleteMenu/${id}`, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                        alert("Record deleted successfully");
+                    } else {
+                        alert("Failed to delete the record");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Deleted the record");
+                });
+            }
+        }
+    function showUpdateForm(id, foodCode, foodName, calories, description) {
+        document.getElementById('update-form').style.display = 'block';
+        document.getElementById('update-id').value = id;
+        document.getElementById('update-foodCode').value = foodCode;
+        document.getElementById('update-foodName').value = foodName;
+        document.getElementById('update-calories').value = calories;
+        document.getElementById('update-description').value = description;
+    }
+    function exportTableToCSV(filename) {
+        var csv = [];
+        var rows = document.querySelectorAll("table tr");
+
+        // Exclude the last column (ACTIONS) by adjusting the loop range
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll("td, th");
+
+            for (var j = 0; j < cols.length - 2; j++) { // Exclude last 2 column
+                row.push(cols[j].innerText);
+            }
+
+            csv.push(row.join(","));        
+        }
+
+        // Create CSV file
+        var csvFile;
+        var downloadLink;
+
+        csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+
+        // Create a link to download the file
+        downloadLink = document.createElement("a");
+
+        downloadLink.download = filename;
+        downloadLink.href = window.URL.createObjectURL(csvFile);
+        downloadLink.style.display = "none";
+
+        // Trigger Download
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+    }
+
+</script>

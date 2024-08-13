@@ -1,0 +1,54 @@
+<div class="container">
+    <h3>Record Details</h3>
+    <p>Age Group: {{record.ageGroup}}</p>
+    <p>Status: {{record.rsStatus}}</p>
+    <p>Income: {{record.income}}</p>
+    <p>Dependants: {{record.dependants}}</p>
+    <p>Vehicle: {{record.vehicle}}</p>
+    <p>Height: {{record.height}}</p>
+    <p>Weight: {{record.weight}}</p>
+    <p>Goals: {{record.goals}}</p>
+    <p>Suitable Goals: {{record.sgoals}}</p>
+    <p>Health Screening: {{record.healthscreen}}</p>
+    <p>Health Screening Report: {{record.hsreport}}</p>
+    <p>Chronic Health: {{record.chealth}}</p>
+    <p>Allergies: {{record.allergies}}</p>
+    <p>Family History: {{record.fhistory}}</p>
+    <p>Hospital History: {{record.hosphistory}}</p>
+    <p>Prescription Medication: {{record.premedic}}</p>
+    <button onclick="window.history.back()">Back</button>
+    <button id="sendEmailBtn">Send Email</button>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM fully loaded and parsed'); // Debugging log
+
+        document.getElementById('sendEmailBtn').addEventListener('click', function() {
+            const container = document.querySelector('.container');
+            const details = Array.from(container.querySelectorAll('p')).map(p => p.textContent).join('\n');
+
+            console.log('Sending email with the following details:', details); // Debugging log
+
+            fetch('/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ details: details }),
+            })
+            .then(response => {
+                console.log('Fetch response:', response); // Debugging log
+                if (response.ok) {
+                    alert('Email sent successfully');
+                } else {
+                    alert('Failed to send email');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to send email');
+            });
+        });
+    });
+
+</script>

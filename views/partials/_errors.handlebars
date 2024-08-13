@@ -1,0 +1,9 @@
+<!-- ACOOUNT MANAGEMENT -->
+{{#if error}}
+    <div class="alert alert-danger"><i style="color: red;">{{error}}</i></div>
+{{/if}}
+
+{{#each errors}}
+    <div class="alert alert-danger"><i style="color: red;">{{text}}</i></div>
+{{else}}
+{{/each}}

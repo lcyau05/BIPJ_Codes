@@ -1,0 +1,103 @@
+  <title>Broadcast Promotional Email</title>
+
+<style>
+  /* Container Styling */
+
+  /* Header Styling */
+  h1 {
+    font-size: 28px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Form Styling */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  label {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input[type="file"] {
+    font-size: 14px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+
+  input[type="submit"] {
+    background-color: #FD8087;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    align-self: center;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #FD8087;
+  }
+
+  /* Error List Styling */
+  ul {
+    list-style-type: none;
+    padding: 0;
+    color: red;
+    margin-bottom: 20px;
+  }
+
+  ul li {
+    margin-bottom: 5px;
+  }
+</style>
+
+
+<body>
+<div class="container">
+    <h1>Broadcast Promotional Email</h1>
+    
+    {{#if errors}}
+      <ul>
+        {{#each errors}}
+          <li>{{this.text}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    <form action="/email_notifications" method="post" enctype="multipart/form-data">
+      <label for="email_title">Enter Email Notification Title:</label>
+      <input type="text" id="email_title" name="email_title" value="{{email_title}}">
+      
+      <label for="email_content">Enter Email Notification Content:</label>
+      <textarea id="email_content" name="email_content" rows="10" cols="50">{{email_content}}</textarea>
+      
+      <label for="attachment">Attach a file:</label>
+      <input type="file" id="attachment" name="attachment">
+      
+      <input type="submit" value="Broadcast">
+    </form>
+  </div>
+</body>
+

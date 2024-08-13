@@ -1,0 +1,400 @@
+<h1 style="text-align: left; padding-top: 20px;">Insurance Plan</h1><br>
+<button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; margin-right: 10px;"
+    onclick="insurancetab('Insurance')">Insurance</button>
+<button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; width: auto; margin-right: 10px;"
+    onclick="insurancetab('Claims')">Claims
+    Made</button>
+{{#ifEquals role 'Admin'}}<button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; width: auto; margin-right: 10px;"
+    onclick="insurancetab('Views')">View Plans</button><button class="btn btn-primary"
+    style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; width: auto; "
+    onclick="window.location.href = '/create_insurance';">Create
+    Insurance</button>{{/ifEquals}}<br><br><br>
+<div style="height: 400px; overflow-y: auto; width: 90%;">
+    <div id="Insurance" class="Icyau05">
+        {{#each insurance}}
+        <div class="card rounded-3 mb-4" style="width: 90%;">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                        <h1 style="font-size: 80px;text-align:center;">&#128663;</h1>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-6">
+                        <p class="lead fw-normal mb-2">{{this.planCategory}}&nbsp;{{this.planName}}</p>
+                        <p><span class="text-muted">Purchased on: {{ formatDate this.createdAt 'DD MMM
+                                YYYY'}}</span></p>
+                        <p><span class="text-muted">Policy No: </span>{{this.invoiceid}}</p>
+                        <p><span class="text-muted">Vehicle No: </span>{{this.vehNo}}</p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 offset-lg-1">
+                        {{#ifEquals ../role 'Admin'}}
+                        <button class="btn btn-primary view-policy" style="font-size: 12px; width: 150px; height: 45px;"
+                            data-invoiceid="{{this.invoiceid}}">View Policy Document</button>
+                        {{/ifEquals}}
+                        {{#ifNotEquals ../role 'Admin'}}
+                        <button class="btn btn-primary view-policy" style="font-size: 12px; width: 150px; height: 45px;"
+                            data-invoiceid="{{this.invoiceid}}">View Policy Document</button><br><br>
+                        <button class="btn btn-primary file-claim" style="font-size: 12px; width: 150px; height: 35px;"
+                            data-invoiceid="{{this.invoiceid}}">File Claim</button>
+                        {{/ifNotEquals}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <div id="Claims" class="Icyau05">
+        <label for="statusFilter">Filter by Status: </label>
+        <select id="statusFilter" class="form-select" style="width: 200px; display: inline-block;">
+            <option value="All">All</option>
+            <option value="Processing">Processing</option>
+            <option value="Approved">Approved</option>
+            <option value="Denied">Denied</option>
+        </select><br><br>
+        {{#each insurance}}
+        {{#if claim}}
+        <div class="card rounded-3 mb-4 claim-card" style="width: 90%;" data-status="{{claim.claimStatus}}">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                        <h1 style="font-size: 80px;text-align:center;">&#128663;</h1>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-6">
+                        <p class="lead fw-normal mb-2">{{this.planCategory}}&nbsp;{{this.planName}} Insurance</p>
+                        <p><span class="text-muted">Claim
+                                ID: #{{claim.id}}</span></p>
+                        {{#ifEquals ../role 'Admin'}}<p style="font-weight: bolder;">Status: {{claim.claimStatus}}</p>
+                        {{/ifEquals}}
+                        <p><span class="text-muted">Purchased on: {{ formatDate this.createdAt 'DD MMM
+                                YYYY'}}</span></p>
+                        <p><span class="text-muted">Policy No: </span>{{this.invoiceid}}</p>
+                        <p><span class="text-muted">Vehicle No: </span>{{this.vehNo}}</p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 offset-lg-1">
+                        {{#ifNotEquals ../role 'Admin'}}Status: {{#ifEquals claim.claimStatus 'Processing'}}<span
+                            style="color: blue; font-weight: bolder;">{{claim.claimStatus}}</span>{{/ifEquals}}{{#ifEquals
+                        claim.claimStatus 'Approved'}}<span
+                            style="color: rgb(61, 211, 61); font-weight: bolder;">{{claim.claimStatus}}</span>{{/ifEquals}}{{#ifEquals
+                        claim.claimStatus 'Denied'}}<span
+                            style="color: rgb(255, 0, 0); font-weight: bolder;">{{claim.claimStatus}}</span>{{/ifEquals}}
+                        </p>{{/ifNotEquals}}
+                        {{#ifEquals ../role 'Admin'}}<button class="btn btn-primary view-policy"
+                            style="font-size: 12px; width: 150px; height: 45px;"
+                            data-invoiceid="{{this.invoiceid}}">View Policy Document</button><br><br>
+                        <button class="btn btn-primary view-claim" style="font-size: 12px; width: 150px; height: 35px;"
+                            data-claimid="{{claim.id}}" data-invoiceid="{{this.invoiceid}}">View
+                            Claim</button>{{/ifEquals}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{/each}}
+    </div>
+    <div id="Views" class="Icyau05">
+        <!-- Search and Filter Section -->
+        <div style="margin-bottom: 20px;">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by Plan Name or Feature Name"
+                style="width: 60%; display: inline-block; margin-right: 10px;">
+            <select id="filterCategory" class="form-control" style="width: 30%; display: inline-block;">
+                <option value="">All Categories</option>
+                {{#each uniqueCategories}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
+        {{#each uniqueCategories}}
+        <div class="plan-section" data-category="{{this}}">
+            {{#each ../insurancePlans}}
+            {{#ifEquals this.planCategory ../this}}
+            <table class="table">
+                <caption class="plan-name">{{this.planName}}</caption>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Feature Name</th>
+                        <th style="width: 10%;">Feature Cost</th>
+                        <th style="width: 35%;">Feature Description</th>
+                        <th style="width: 15%;">Optional Feature</th>
+                        <th style="width: 15%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="feat-name">{{this.featName}}</td>
+                        <td>{{this.featCost}}</td>
+                        <td>{{this.featDescription}}</td>
+                        <td>{{#if this.optionalfeat}}Optional{{else}}Compulsory{{/if}}</td>
+                        <td>
+                            <button class="btn btn-primary edit-btn" data-id="{{this.id}}">Edit</button>
+                            <button class="btn btn-danger delete-btn" data-id="{{this.id}}"><i class="fa fa-trash"
+                                    aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {{/ifEquals}}
+            {{/each}}
+        </div>
+        {{/each}}
+    </div>
+    <!-- Inline Edit Form -->
+    <div id="editFormContainer" style="display: none;">
+        <h3>Edit Feature</h3>
+        <form id="editForm">
+            <div class="mb-3">
+                <label for="featName" class="form-label">Feature Name</label>
+                <input type="text" class="form-control" id="featName" name="featName" required>
+            </div>
+            <div class="mb-3">
+                <label for="featCost" class="form-label">Feature Cost</label>
+                <input type="text" class="form-control" id="featCost" name="featCost" required>
+            </div>
+            <div class="mb-3">
+                <label for="featDescription" class="form-label">Feature Description</label>
+                <textarea class="form-control" id="featDescription" name="featDescription" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="optionalfeat" class="form-label">Optional Feature</label>
+                <select class="form-control" id="optionalfeat" name="optionalfeat" required>
+                    <option value="true">Optional</option>
+                    <option value="false">Compulsory</option>
+                </select>
+            </div>
+            <input type="hidden" id="featureId" name="featureId">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" id="cancelEdit">Cancel</button>
+        </form>
+    </div>
+</div>
+<br><br><br><br>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    caption {
+        display: table-caption;
+        caption-side: top;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 0.5em;
+    }
+</style>
+<script>
+    function insurancetab(purpose) {
+        var i;
+        var x = document.getElementsByClassName("Icyau05");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(purpose).style.display = "block";
+    }
+    // Set the default tab to be displayed when the page loads
+    window.onload = function () {
+        insurancetab('Insurance');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add click event listeners to all buttons with class 'view-policy'
+        document.querySelectorAll('.view-policy').forEach(button => {
+            button.addEventListener('click', async function () {
+                const invoiceid = this.getAttribute('data-invoiceid');
+                $.ajax({
+                    type: 'POST',
+                    url: '/insur/viewInvoice', // Adjust the URL as per your backend route
+                    data: { invoiceid: invoiceid },
+                    success: function (response) {
+                        console.log('Feature updated successfully:', response);
+                        window.location.href = '/invoice'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating feature:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+
+        // Add click event listeners to all buttons with class 'file-claim'
+        document.querySelectorAll('.file-claim').forEach(button => {
+            button.addEventListener('click', async function () {
+                const invoiceid = this.getAttribute('data-invoiceid');
+                $.ajax({
+                    type: 'POST',
+                    url: '/insur/filingclaim', // Adjust the URL as per your backend route
+                    data: { invoiceid: invoiceid },
+                    success: function (response) {
+                        console.log('Feature updated successfully:', response);
+                        window.location.href = '/fileclaim'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating feature:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+
+        // Add click event listeners to all buttons with class 'file-claim'
+        document.querySelectorAll('.view-claim').forEach(button => {
+            button.addEventListener('click', async function () {
+                const claimid = this.getAttribute('data-claimid');
+                const invoiceid = this.getAttribute('data-invoiceid');
+                $.ajax({
+                    type: 'POST',
+                    url: '/insur/viewClaim', // Adjust the URL as per your backend route
+                    data: { claimid: claimid, invoiceid: invoiceid },
+                    success: function (response) {
+                        console.log('Feature updated successfully:', response);
+                        window.location.href = '/fileclaim'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating feature:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+        const editFormContainer = document.getElementById('editFormContainer');
+        const editForm = document.getElementById('editForm');
+
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                // Fetch the feature data by ID and populate the form
+                fetch(`/insur/features/${id}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('featName').value = data.featName;
+                        document.getElementById('featCost').value = data.featCost;
+                        document.getElementById('featDescription').value = data.featDescription;
+                        document.getElementById('optionalfeat').value = data.optionalfeat;
+                        document.getElementById('featureId').value = data.id;
+                        editFormContainer.style.display = 'block';
+                        document.getElementById('editFormContainer').scrollIntoView({ behavior: 'smooth' });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching feature data:', error);
+                    });
+            });
+        });
+
+        editForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(editForm);
+            const id = document.getElementById('featureId').value;
+            fetch(`/insur/features/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Reload the page or update the table row dynamically
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating feature:', error);
+                });
+        });
+
+        document.getElementById('cancelEdit').addEventListener('click', () => {
+            editFormContainer.style.display = 'none';
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                if (confirm('Are you sure you want to delete this feature?')) {
+                    fetch(`/insur/features/${id}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Remove the table row dynamically or reload the page
+                                location.reload();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error deleting feature:', error);
+                        });
+                }
+            });
+        });
+        const searchInput = document.getElementById('searchInput');
+        const filterCategory = document.getElementById('filterCategory');
+
+        searchInput.addEventListener('input', filterInsurance);
+        filterCategory.addEventListener('change', filterInsurance);
+
+        function filterInsurance() {
+            const searchValue = searchInput.value.trim().toLowerCase();
+            const selectedCategory = filterCategory.value.toLowerCase();
+
+            document.querySelectorAll('.plan-section').forEach(planSection => {
+                const category = planSection.getAttribute('data-category').toLowerCase();
+                const tables = planSection.querySelectorAll('table');
+
+                let showPlan = false;
+
+                tables.forEach(table => {
+                    const rows = table.querySelectorAll('tbody tr');
+                    let showTable = false;
+
+                    rows.forEach(row => {
+                        const planName = table.querySelector('.plan-name').textContent.trim().toLowerCase();
+                        const featName = row.querySelector('.feat-name').textContent.toLowerCase();
+
+                        const matchesSearch = planName.includes(searchValue) || featName.includes(searchValue);
+                        const matchesCategory = selectedCategory === "" || category === selectedCategory;
+
+                        if (matchesSearch && matchesCategory) {
+                            row.style.display = '';
+                            showTable = true;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    // Show or hide the entire table based on the filter results
+                    table.style.display = showTable ? '' : 'none';
+
+                    // If any table is visible, show the plan section
+                    if (showTable) {
+                        showPlan = true;
+                    }
+                });
+
+                // Show or hide the entire plan section based on the filter results
+                planSection.style.display = showPlan ? '' : 'none';
+            });
+        }
+        document.getElementById('statusFilter').addEventListener('change', function () {
+            const selectedStatus = this.value;
+            const claims = document.querySelectorAll('.claim-card');
+
+            claims.forEach(claim => {
+                const claimStatus = claim.getAttribute('data-status');
+
+                if (selectedStatus === 'All' || claimStatus === selectedStatus) {
+                    claim.style.display = 'block';
+                } else {
+                    claim.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>

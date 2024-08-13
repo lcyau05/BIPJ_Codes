@@ -1,0 +1,116 @@
+<title>Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1 {
+        width: 100%;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .chart-container {
+        background: #fff;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    @media (max-width: 768px) {
+        .chart-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<h1>Admin Dashboard</h1>
+<div class="chart-grid">
+    <div class="chart-container">
+        <canvas id="genderChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="growthChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="exampleChart1"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="exampleChart2"></canvas>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctxGender = document.getElementById('genderChart').getContext('2d');
+        const genderCounts = {{{ genderCounts }}}; // Use triple braces to avoid escaping
+
+    const labels = Object.keys(genderCounts);
+    const data = Object.values(genderCounts);
+
+    new Chart(ctxGender, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.label || '';
+                            if (label) {
+                                label += ': ' + context.raw;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Example for another chart
+    const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+    new Chart(ctxGrowth, {
+        type: 'line',
+        data: {
+            labels: chartData.growthData.map(item => item.month),
+            datasets: [{
+                label: 'User Growth',
+                data: chartData.growthData.map(item => item.count),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        }
+    });
+    });
+</script>

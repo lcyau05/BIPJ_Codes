@@ -1,0 +1,140 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">- Available Videos & Vouchers -</h6>
+            <h1 class="mb-5">Video & Voucher</h1>
+        </div>
+    </div>
+</div>
+<div class="col-10" style="padding-left: 100px; margin: 0 auto;">
+    <button class="btn btn-primary"
+        style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; margin-right: 10px;"
+        onclick="calebtab('Video')">Video</button>
+    <button class="btn btn-primary"
+        style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; width: auto;"
+        onclick="calebtab('Voucher')">Voucher</button><br><br>
+
+    <!-- Video Management -->
+    <div id="Video" class="caleb">
+        <div class="my-4">
+            <h2>Videos</h2>
+            <ul id="video-list" class="list-group">
+                <!-- Video items will be inserted here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Voucher Management -->
+    <div id="Voucher" class="caleb" style="display: none;">
+        <h2>Vouchers</h2>
+        <ul id="voucher-list" class="list-group">
+            <!-- Voucher items will be inserted here -->
+        </ul>
+    </div>
+</div>
+</div>
+<script>
+    // Function to toggle between Video and Voucher tabs
+    function calebtab(department) {
+        const tabs = document.getElementsByClassName("caleb");
+        for (let tab of tabs) {
+            tab.style.display = "none";
+        }
+        document.getElementById(department).style.display = "block";
+    }
+    // Function to fetch and display videos
+    function loadVideos() {
+        fetch('/api/videos') // Endpoint to fetch videos
+            .then(response => response.json())
+            .then(videos => {
+                const videoList = document.getElementById('video-list');
+                videoList.innerHTML = ''; // Clear previous items
+
+                videos.forEach(video => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.innerHTML = `
+                            <h5>${video.title}</h5>
+                            <p>${video.description}</p>
+                            ${video.url}
+                        `;
+                    videoList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching videos:', error));
+    }
+
+    // Function to fetch and display vouchers
+    function loadVouchers() {
+        fetch('/api/vouchers') // Endpoint to fetch vouchers
+            .then(response => response.json())
+            .then(vouchers => {
+                const voucherList = document.getElementById('voucher-list');
+                voucherList.innerHTML = ''; // Clear previous items
+
+                vouchers.forEach(voucher => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+                    const voucherDetails = document.createElement('div');
+                    voucherDetails.className = 'voucher-details';
+
+                    const qrCodeContainer = document.createElement('div');
+                    qrCodeContainer.id = `qrcode-${voucher.id}`; // Unique ID for each QR code
+                    qrCodeContainer.className = 'qr-code-container';
+
+                    voucherDetails.innerHTML = `
+                    <h5>${voucher.voucName}</h5>
+                    <p>${voucher.voucDesc}</p>
+                    <p>Discount: ${voucher.discount}%</p>
+                    <p>Expires on: ${new Date(voucher.expiryDate).toLocaleDateString()}</p>
+                `;
+
+                    li.appendChild(voucherDetails);
+                    li.appendChild(qrCodeContainer);
+                    voucherList.appendChild(li);
+
+                    // Generate the QR code
+                    new QRCode(qrCodeContainer, {
+                        text: voucher.code,
+                        width: 128,
+                        height: 128,
+                    });
+                });
+            })
+            .catch(error => console.error('Error fetching vouchers:', error));
+    }
+
+    // Load videos and vouchers on page load
+    window.onload = function () {
+        loadVideos();
+        loadVouchers();
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+    .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+
+    .voucher-details {
+        flex: 1;
+        padding-right: 15px;
+    }
+
+    .qr-code-container {
+        min-width: 128px;
+    }
+
+    .qr-code-container img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+</style>

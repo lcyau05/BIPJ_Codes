@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Workshop Page</title>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js'></script>
+    <script
+        src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet'
+        href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css'
+        type='text/css' />
+
+    <style>
+        :root {
+            --main-color: #FD8087;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--main-color);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .form-area-container label {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-area-container input,
+        .form-area-container select,
+        .form-area-container textarea {
+            padding: 0.8rem;
+            width: 100%;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+
+        .form-area-container input:focus,
+        .form-area-container select:focus,
+        .form-area-container textarea:focus {
+            box-shadow: 0 0 0 .25rem rgba(253, 128, 135, 0.2);
+            border: solid 1px var(--main-color);
+        }
+
+        .button_container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .button_container button {
+            padding: 1rem 1.5rem;
+            border-radius: 100px;
+            background-color: var(--main-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .button_container button:hover {
+            background-color: #d96b71;
+        }
+
+        .form-control {
+            border-radius: 100px;
+        }
+
+        .form-area-container {
+            margin-top: 5%;
+        }
+
+        #workshop_category {
+            background-color: white;
+        }
+
+        .header-text {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--main-color);
+        }
+
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .mapboxgl-ctrl-geocoder--input {
+            border-radius: 100px;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            width: calc(100% - 50px);
+        }
+
+        .mapboxgl-ctrl-geocoder--input:focus {
+            box-shadow: 0 0 0 .25rem rgba(253, 128, 135, 0.2);
+            border: solid 1px var(--main-color);
+        }
+
+        .mapboxgl-ctrl-geocoder {
+            margin: 1rem 0;
+        }
+
+        .mapboxgl-ctrl-geocoder--suggestions {
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid bg-light about py-5">
+        <div class="container">
+            <form action="/create_workshop" method="post">
+                <div class="about-item-content bg-white rounded p-5 h-100">
+                    <h2 class="header-text">Create Workshop</h2>
+                    <div class="form-area-container">
+                        <div class="row mb-3">
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_title">Workshop Title:</label>
+                                <input type="text" id="workshop_title" name="workshop_title" class="form-control"
+                                    value="{{workshop_title}}" required>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_organizer">Workshop Organizer:</label>
+                                <input type="text" id="workshop_organizer" name="workshop_organizer"
+                                    class="form-control" value="{{workshop_organizer}}" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_venue">Workshop Venue:</label>
+                                <input type="text" id="workshop_venue" name="workshop_venue" class="form-control"
+                                    readonly required>
+                                <div id="map"></div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_category">Workshop Category:</label>
+                                <select id="workshop_category" name="workshop_category" class="form-control" required>
+                                    <option value="">Select a category</option>
+                                    <option value="Financial_Literacy">Financial Literacy</option>
+                                    <option value="Mental_Wellness">Mental Wellness</option>
+                                    <option value="Physical_Health">Physical Health</option>
+                                    <option value="Environmental_Awareness">Environmental Awareness</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_description">Workshop Description:</label>
+                                <textarea id="workshop_description" name="workshop_description" class="form-control"
+                                    rows="1" value="{{workshop_description}}" required></textarea>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_date">Workshop Date:</label>
+                                <input type="date" id="workshop_date" name="workshop_date" class="form-control"
+                                    value="{{workshop_date}}" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_participants_limit">Workshop Participants Limit:</label>
+                                <input type="number" id="workshop_participants_limit" name="workshop_participants_limit"
+                                    class="form-control" value="{{workshop_participants_limit}}" required>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_start_time">Workshop Start Time:</label>
+                                <input type="time" id="workshop_start_time" name="workshop_start_time"
+                                    class="form-control" value="{{workshop_start_time}}" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-6 col-md-12">
+                                <label for="workshop_end_time">Workshop End Time:</label>
+                                <input type="time" id="workshop_end_time" name="workshop_end_time" class="form-control"
+                                    value="{{workshop_end_time}}" required>
+                            </div>
+                        </div>
+
+                        <div class="button_container">
+                            <button type="submit">Create Workshop</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoieWFuLXJlbnh1YW4iLCJhIjoiY2x5d3FndHpzMDE3YjJqcHNuaWViMDR0NCJ9.i8r900Y38reUA-dlCFlQLg';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [103.8198, 1.3521], // Coordinates of Singapore
+            zoom: 12
+        });
+
+        const geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl,
+            placeholder: 'Search for a venue in Singapore',
+            countries: 'sg'
+        });
+
+        document.getElementById('map').appendChild(geocoder.onAdd(map));
+
+        geocoder.on('result', function (e) {
+            document.getElementById('workshop_venue').value = e.result.place_name;
+        });
+    </script>
+</body>
+
+</html>

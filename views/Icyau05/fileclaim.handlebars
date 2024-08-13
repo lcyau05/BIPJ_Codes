@@ -1,0 +1,370 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h1 class="mb-5">INSURANCE CLAIM FORM</h1>
+            <h6 class="section-title bg-white text-center text-primary px-3">- FILE CLAIMS -</h6>
+        </div>
+    </div>
+</div>
+<form class="claim" id="claimForm" action="/insur/submitClaim" method="post" enctype="multipart/form-data"
+    style="width: 80%; padding: 20px; margin: 0 auto;">
+    <div class="row g-3">
+        <h4>Full Name</h4>
+        <div class="col-lg-12 col-xl-7">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}
+                <input type="text" class="form-control" id="fname" placeholder="First Name" name="firstName"
+                    value="{{claim.first_name}}" readonly>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}<input type="text" class="form-control" id="fname" placeholder="First Name"
+                    name="firstName" value="{{user.first_name}}" required>{{/ifNotEquals}}
+                <label for="fname">First Name</label>
+                <span class="validation-message" id="fnameMessage"></span>
+            </div>
+        </div>
+        <div class="col-lg-12 col-xl-5">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}
+                <input type="text" class="form-control" id="lname" placeholder="Last Name" name="lastName"
+                    value="{{claim.last_name}}" readonly>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}
+                <input type="text" class="form-control" id="lname" placeholder="Last Name" name="lastName"
+                    value="{{user.last_name}}" required>{{/ifNotEquals}}
+                <label for="lname">Last Name</label>
+                <span class="validation-message" id="lnameMessage"></span>
+            </div>
+        </div>
+        <h4 style="padding-top: 20px;">Email</h4>
+        <div class="col-lg-12">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}<input type="email" class="form-control" id="email"
+                    placeholder="Email Address" name="email" value="{{claim.email}}" readonly>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}<input type="email" class="form-control" id="email"
+                    placeholder="Email Address" name="email" value="{{user.email}}" required>{{/ifNotEquals}}
+                <label for="email">Email Address</label>
+                <span class="validation-message" id="emailMessage"></span>
+            </div>
+        </div>
+        <h4 style="padding-top: 20px; padding-bottom: 20px;">Insurance Policy</h4>
+        <div class="card rounded-3 mb-4" style="width: 90%; margin: 0 auto;">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                        <h1 style="font-size: 80px;text-align:center;">&#128663;</h1>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-6">
+                        <p class="lead fw-normal mb-2">{{insurance.planCategory}}&nbsp;{{insurance.planName}} Insurance
+                        </p>
+                        <p><span class="text-muted">Purchased on: {{ formatDate insurance.createdAt 'DD MMM
+                                YYYY'}}</span></p>
+                        <p><span class="text-muted">Policy No: </span>{{insurance.invoiceid}}</p>
+                        <p><span class="text-muted">Vehicle No: </span>{{details.vehNo}}</p>
+                    </div>
+                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                        <h5 class="mb-0">${{insurance.totalCost}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <h4 style="padding-top: 20px;">Date of Incident</h4>
+            {{#ifEquals role 'Admin'}}<input type="date" id="DOI" name="DOI" class="form-control" value="{{claim.dateOfIncident}}"
+                readonly>{{/ifEquals}}
+            {{#ifNotEquals role 'Admin'}}<input type="date" id="DOI" name="DOI" class="form-control"
+                required>{{/ifNotEquals}}
+            <span class="validation-message" id="DOIMessage"></span>
+        </div>
+        <h4 style="padding-top: 20px;">Description of Incident</h4>
+        <div class="col-12">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}<textarea class="form-control" placeholder="Description" id="reasons"
+                    name="description" style="height: 120px" readonly>{{claim.claimDesc}}</textarea>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}<textarea class="form-control" placeholder="Description" id="reasons"
+                    name="description" style="height: 120px" required></textarea>{{/ifNotEquals}}
+                <label for="reasons">Description</label>
+                <span class="validation-message" id="reasonsMessage"></span>
+            </div>
+        </div>
+        <h4 style="padding-top: 20px;">Claim Amount</h4>
+        <div class="col-lg-12">
+            <div class="form-floating">
+                {{#ifEquals role 'Admin'}}<input type="number" class="form-control" id="amountClaimed"
+                    name="amountClaimed" value="{{claim.amountClaimed}}" min="50" readonly>{{/ifEquals}}
+                {{#ifNotEquals role 'Admin'}}<input type="number" class="form-control" id="amountClaimed"
+                    name="amountClaimed" min="50" placeholder="Amount Claimed" required>{{/ifNotEquals}}
+                <label for="amountClaimed">Amount Claimed</label>
+                <span class="validation-message" id="amountClaimedMessage"></span>
+            </div>
+        </div>
+        {{#ifNotEquals role 'Admin'}}
+        <h4 style="padding-top: 20px;">Supporting Documents (if any)</h4>
+        <div class="col-lg-12">
+            <div class="form-floating">
+                <input type="file" id="docUpload" name="docUpload"
+                    accept="image/png, image/jpeg, image/jpg, image/gif, .pdf, .doc, .docx, .txt" multiple>
+                <span class="validation-message" id="docUploadMessage"></span>
+            </div>
+        </div>
+        {{/ifNotEquals}}
+        {{#ifEquals role 'Admin'}}
+        {{#if claimDocuments}}
+        <div>
+            <h4>Claim Documents:</h4>
+            {{#each claimDocuments}}
+            <div class="claim-document">
+                {{#if (isPdf this.documentPath)}}
+                <a href="{{this.documentPath}}" target="_blank">View Document - {{this.documentPath}}</a>
+                {{else}}
+                <img src="{{this.documentPath}}" alt="Claim Document" style="max-width: 100%;">
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+        {{/ifEquals}}
+        {{#ifEquals role 'Admin'}}
+        <h4 style="padding-top: 20px;">Reasons for Rejecting Claim (if any)</h4>
+        <div class="col-lg-12">
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Reasons for Rejecting Claim" id="rejreasons"
+                    name="rejreasons" style="height: 120px"></textarea>
+                <label for="rejreasons">Reasons for Rejecting Claim</label>
+            </div>
+        </div>
+        {{/ifEquals}}
+        {{#ifNotEquals role 'Admin'}}
+        <h4 style="padding-top: 20px;">Declaration and Consent</h4>
+        <label for="declaration">
+            <input type="checkbox" id="declaration" name="declaration" required>
+            I declare that the information provided is true and accurate to the best of my knowledge.
+        </label>
+        <br>
+
+        <label for="consent">
+            <input type="checkbox" id="consent" name="consent" required>
+            I agree to the terms and conditions.
+        </label>
+        {{/ifNotEquals}}
+    </div>
+    <!-- Hidden fields -->
+    <input type="hidden" id="invoiceid" name="invoiceid" value="{{insurance.invoiceid}}">
+    <input type="hidden" id="vehNo" name="vehNo" value="{{details.vehNo}}">
+    <div class="text-center" style="padding: 20px 0;">
+        {{#ifNotEquals role 'Admin'}}<button type="submit" class="btn btn-primary">File
+            Claim</button>{{/ifNotEquals}}{{#ifEquals role 'Admin'}}<button type="button"
+            class="btn btn-primary reject-claim" style="background-color: rgb(212, 43, 43);"
+            data-claimid="{{claim.id}}">Reject
+            Claim</button><button type="button" class="btn btn-primary approve-claim"
+            style="margin-left: 100px; background-color: rgb(52, 198, 52);" data-claimid="{{claim.id}}">Approve
+            Claim</button>{{/ifEquals}}
+    </div>
+</form>
+
+
+<style>
+    .payment {
+        padding: 20px;
+        flex: 1;
+    }
+
+    button {
+        width: 177px;
+        height: 59px;
+        font-size: 22px;
+        font-weight: 500;
+        background: #FD8087;
+        color: #fff;
+        margin: 30px auto 20px auto;
+        padding: 4% 8%;
+        border: 2px solid #828282;
+        border-radius: 20px;
+        transition-duration: 0.5s;
+    }
+
+    .validation-message {
+        color: red;
+        font-size: 12px;
+        display: block;
+        margin-top: 5px;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Event listeners for form validation
+        document.getElementById('fname').addEventListener('blur', validateFirstName);
+        document.getElementById('fname').addEventListener('input', restrictNameInput);
+        document.getElementById('lname').addEventListener('blur', validateLastName);
+        document.getElementById('lname').addEventListener('input', restrictNameInput);
+        document.getElementById('email').addEventListener('blur', validateEmail);
+        document.getElementById('reasons').addEventListener('blur', validateReasons);
+        // Add event listeners for new validations
+        document.getElementById('amountClaimed').addEventListener('blur', validateAmountClaimed);
+        document.getElementById('DOI').addEventListener('blur', validateDateOfIncident);
+        // Handle file input conditionally
+        const docUpload = document.getElementById('docUpload');
+        if (docUpload) {
+            docUpload.addEventListener('change', validateFileUpload);
+        } else {
+            console.log('File input (docUpload) not present for this role');
+        }
+
+        function restrictNameInput(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+        }
+
+        function validateFirstName() {
+            const firstName = document.getElementById('fname').value.trim();
+            const fnameMessage = document.getElementById('fnameMessage');
+            fnameMessage.textContent = firstName === '' ? 'First Name is required' : '';
+        }
+
+        function validateLastName() {
+            const lastName = document.getElementById('lname').value.trim();
+            const lnameMessage = document.getElementById('lnameMessage');
+            lnameMessage.textContent = lastName === '' ? 'Last Name is required' : '';
+        }
+
+        function validateEmail() {
+            const email = document.getElementById('email').value.trim();
+            const emailMessage = document.getElementById('emailMessage');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '') {
+                emailMessage.textContent = 'Email is required';
+            } else if (!emailRegex.test(email)) {
+                emailMessage.textContent = 'Invalid email format';
+            } else {
+                emailMessage.textContent = '';
+            }
+        }
+
+        function validateReasons() {
+            const reasons = document.getElementById('reasons').value.trim();
+            const reasonsMessage = document.getElementById('reasonsMessage');
+            reasonsMessage.textContent = reasons === '' ? 'Description is required' : '';
+        }
+
+        function validateAmountClaimed() {
+            const amountClaimed = document.getElementById('amountClaimed').value.trim();
+            const amountClaimedMessage = document.getElementById('amountClaimedMessage');
+            const amount = parseFloat(amountClaimed);
+
+            if (isNaN(amount) || amount < 50) {
+                amountClaimedMessage.textContent = 'Claim Amount must be a number greater than or equal to 50';
+            } else {
+                amountClaimedMessage.textContent = '';
+            }
+        }
+
+        function validateDateOfIncident() {
+            const dateOfIncident = new Date(document.getElementById('DOI').value);
+            const today = new Date();
+            const threeMonthsAgo = new Date();
+            threeMonthsAgo.setMonth(today.getMonth() - 3);
+
+            const dateOfIncidentMessage = document.getElementById('DOIMessage');
+
+            if (isNaN(dateOfIncident.getTime())) {
+                dateOfIncidentMessage.textContent = 'Date of Incident is required';
+            } else if (dateOfIncident > today) {
+                dateOfIncidentMessage.textContent = 'Date of Incident cannot be in the future';
+            } else if (dateOfIncident < threeMonthsAgo) {
+                dateOfIncidentMessage.textContent = 'Date of Incident must be within the last 3 months';
+            } else {
+                dateOfIncidentMessage.textContent = '';
+            }
+        }
+
+        function validateFileUpload() {
+            const fileInput = document.getElementById('docUpload');
+            const fileUploadMessage = document.getElementById('docUploadMessage');
+            const files = fileInput.files;
+            fileUploadMessage.textContent = files.length === 0 ? 'Please upload at least one document' : '';
+        }
+
+        function validateForm() {
+            validateFirstName();
+            validateLastName();
+            validateEmail();
+            validateReasons();
+            validateAmountClaimed();
+            validateDateOfIncident();
+            validateFileUpload();
+
+            const fnameMessage = document.getElementById('fnameMessage').textContent;
+            const lnameMessage = document.getElementById('lnameMessage').textContent;
+            const emailMessage = document.getElementById('emailMessage').textContent;
+            const reasonsMessage = document.getElementById('reasonsMessage').textContent;
+            const amountClaimedMessage = document.getElementById('amountClaimedMessage').textContent;
+            const dateOfIncidentMessage = document.getElementById('DOIMessage').textContent;
+            const fileUploadMessage = document.getElementById('docUploadMessage').textContent;
+
+            return !(fnameMessage || lnameMessage || emailMessage || reasonsMessage || amountClaimedMessage || dateOfIncidentMessage || fileUploadMessage);
+        }
+
+        document.getElementById('claimForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            if (!validateForm()) {
+                console.log('Form validation failed');
+                return; // Exit if form validation fails
+            }
+
+            // Create FormData object to handle both text and file data
+            const formData = new FormData(document.getElementById('claimForm'));
+
+            try {
+                const response = await fetch('/insur/submitClaim', {
+                    method: 'POST',
+                    body: formData // Send FormData directly
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                window.location.href = '/claimsuccess'; // Redirect to success page
+            } catch (error) {
+                console.error('Error while submitting form:', error);
+            }
+        });
+
+        document.querySelectorAll('.reject-claim').forEach(button => {
+            button.addEventListener('click', async function () {
+                const claimid = this.getAttribute('data-claimid');
+                const rejreasons = document.getElementById('rejreasons').value.trim(); // Get the rejection reasons
+                $.ajax({
+                    type: 'POST',
+                    url: '/insur/rejectClaim', // Adjust the URL as per your backend route
+                    data: { claimid: claimid, rejreasons: rejreasons },
+                    success: function (response) {
+                        console.log('Feature updated successfully:', response);
+                        window.location.href = '/insurdashboard'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating feature:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+
+        // Add click event listeners to all buttons with class 'file-claim'
+        document.querySelectorAll('.approve-claim').forEach(button => {
+            button.addEventListener('click', async function () {
+                const claimid = this.getAttribute('data-claimid');
+                $.ajax({
+                    type: 'POST',
+                    url: '/insur/approveClaim', // Adjust the URL as per your backend route
+                    data: { claimid: claimid },
+                    success: function (response) {
+                        console.log('Feature updated successfully:', response);
+                        window.location.href = '/insurdashboard'; // Redirect to success page
+                    },
+                    error: function (err) {
+                        console.error('Error updating feature:', err);
+                        // Handle errors
+                    }
+                });
+            });
+        });
+    });
+</script>

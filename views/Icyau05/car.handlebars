@@ -1,0 +1,344 @@
+<br><br><br>
+<form action="/insur/submitCarInsurance" method="post" class="carQns" id="carInsuranceForm" style="margin: 0 auto;">
+    <br><br>
+    <h4 style="text-align: center; font-size: 2.5em; text-decoration-line: underline;">&#128663; CAR INSURANCE
+        &#128663;</h4><br><br>
+    <div class="row">
+        <div class="col" style="text-align: center; text-decoration-line: underline;">
+            <h3>About You & Your Car</h3>
+        </div>
+        <div class="col" style="text-align: center;">
+            <h4><label for="vehNo" style="text-decoration-line: underline;">Vehicle No: </label>&nbsp;&nbsp;<input
+                    type="text" id="vehNo" name="vehNo" pattern="[A-Za-z0-9]{1,10}"
+                    title="Vehicle number should be alphanumeric and 1-10 characters long" required></h4>
+            <div id="vehNoError" class="error-message"></div>
+        </div>
+    </div><br>
+    <div class="col-10" style="margin: 0 auto;">
+        <div class="card rounded-3 mb-4">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center" id="coolDropdown">
+                    <h4><label for="makemodel" style="font-size: 22px; font-weight: bold;">Make and Model</label>
+                    </h4>
+                    <select id="makemodel" name="makemodel" required>
+                        <option value="">-- Please Select --</option>
+                        {{#each makes}}
+                        <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                    </select>
+                    <div id="makemodelError" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="col-10" style="margin: 0 auto;">
+        <div class="card rounded-3 mb-4">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center" id="coolDropdown">
+                    <h4><label for="registeredyear" style="font-size: 22px; font-weight: bold;">Year of
+                            Registration</label>
+                    </h4>
+                    <select id="registeredyear" name="registeredyear" required>
+                        <option value="">-- Please Select --</option>
+                    </select>
+                    <div id="registeredyearError" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="col-10" style="margin: 0 auto;">
+        <div class="card rounded-3 mb-4">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center" id="coolDropdown">
+                    <h4 style="font-size: 22px; font-weight: bold;">Car Scheme</h4>
+                    <div class="button-option-group">
+                        <input type="radio" id="carscheme-options1" name="carscheme-options" value="Non Off-Peak">
+                        <label for="carscheme-options1" onclick="handleClick('carscheme-options1')">Non
+                            Off-Peak</label>
+                        <input type="radio" id="carscheme-options2" name="carscheme-options" value="Off-Peak">
+                        <label for="carscheme-options2" onclick="handleClick('carscheme-options2')">Off-Peak</label>
+                    </div>
+                    <div id="carschemeError" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="col-10" style="margin: 0 auto;">
+        <div class="card rounded-3 mb-4">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center" id="coolDropdown">
+                    <h4 style="font-size: 22px; font-weight: bold;">No Claim Discount (NCD%)</h4><br><br>
+                    <div class="button-option-group">
+                        <input type="radio" id="NCD-options1" name="NCD-options" value="0%">
+                        <label for="NCD-options1" onclick="handleClick('NCD-options1')">0%</label>
+                        <input type="radio" id="NCD-options2" name="NCD-options" value="10%">
+                        <label for="NCD-options2" onclick="handleClick('NCD-options2')">10%</label>
+                        <input type="radio" id="NCD-options3" name="NCD-options" value="20%">
+                        <label for="NCD-options3" onclick="handleClick('NCD-options3')">20%</label>
+                        <input type="radio" id="NCD-options4" name="NCD-options" value="30%">
+                        <label for="NCD-options4" onclick="handleClick('NCD-options4')">30%</label>
+                        <input type="radio" id="NCD-options5" name="NCD-options" value="40%">
+                        <label for="NCD-options5" onclick="handleClick('NCD-options5')">40%</label>
+                        <input type="radio" id="NCD-options6" name="NCD-options" value="50%">
+                        <label for="NCD-options6" onclick="handleClick('NCD-options6')">50%</label>
+                    </div>
+                    <div id="NCDError" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="col-10" style="margin: 0 auto;">
+        <div class="card rounded-3 mb-4">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center" id="coolDropdown">
+                    <h4 style="font-size: 22px; font-weight: bold;">Years of Valid Driving License</h4><br><br>
+                    <div class="button-option-group">
+                        <input type="radio" id="DL-options1" name="DL-options" value="New">
+                        <label for="DL-options1" onclick="handleClick('DL-options1')">
+                            < 1 Year</label>
+                                <input type="radio" id="DL-options2" name="DL-options" value="1">
+                                <label for="DL-options2" onclick="handleClick('DL-options2')">1</label>
+                                <input type="radio" id="DL-options3" name="DL-options" value="2">
+                                <label for="DL-options3" onclick="handleClick('DL-options3')">2</label>
+                                <input type="radio" id="DL-options4" name="DL-options" value="3">
+                                <label for="DL-options4" onclick="handleClick('DL-options4')">3</label>
+                                <input type="radio" id="DL-options5" name="DL-options" value="4">
+                                <label for="DL-options5" onclick="handleClick('DL-options5')">4</label>
+                                <input type="radio" id="DL-options6" name="DL-options" value="Experienced">
+                                <label for="DL-options6" onclick="handleClick('DL-options6')">>5 Years</label>
+                    </div>
+                    <div id="DLError" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="col-10" style="margin: 0 auto;">
+        <div class="card rounded-3 mb-4">
+            <div class="card-body p-4">
+                <div class="row d-flex justify-content-between align-items-center" id="coolDropdown">
+                    <h4 style="font-size: 22px; font-weight: bold;">Number of Claims in Last 3 Years</h4><br><br>
+                    <div class="button-option-group">
+                        <input type="radio" id="Claims-options1" name="Claims-options" value="0">
+                        <label for="Claims-options1" onclick="handleClick('Claims-options1')">0</label>
+                        <input type="radio" id="Claims-options2" name="Claims-options" value="1">
+                        <label for="Claims-options2" onclick="handleClick('Claims-options2')">1</label>
+                        <input type="radio" id="Claims-options3" name="Claims-options" value="2">
+                        <label for="Claims-options3" onclick="handleClick('Claims-options3')">2</label>
+                        <input type="radio" id="Claims-options4" name="Claims-options" value="Unacceptable">
+                        <label for="Claims-options4" onclick="handleClick('Claims-options4')">>=3</label>
+                    </div>
+                    <div id="ClaimsError" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-10" style="margin: 0 auto; text-align: center;">
+        <button type="submit" class="btn btn-primary w-50">Proceed</button>
+    </div><br><br>
+</form>
+</div>
+<style>
+    /* Error message styling */
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+        display: block;
+        /* Ensure messages are visible */
+    }
+
+    #vehNo {
+        width: 200px;
+        height: 50px;
+        stroke-width: 1px;
+        stroke: #000;
+        border-radius: 10px;
+    }
+
+    .carQns {
+        width: 1265px;
+        height: auto;
+        border-radius: 128px;
+        background: rgba(217, 217, 217, 0.49);
+    }
+
+    #coolDropdown select {
+        font-size: large;
+        text-align: center;
+        border: none;
+        padding: 10px;
+        width: 80%;
+        cursor: pointer;
+        margin: 0 auto;
+        border-bottom: 2px solid black;
+        /* Adjust the thickness and color as needed */
+    }
+
+    .button-option-group {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+    }
+
+    .button-option-group input[type="radio"] {
+        display: none;
+    }
+
+    .button-option-group label {
+        padding: 10px 20px;
+        border: 2px solid #828282;
+        border-radius: 20px;
+        background-color: #C3CCEC;
+        text-align: center;
+        width: 200px;
+        color: #fff;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .button-option-group input[type="radio"]:checked+label {
+        background-color: #FD8087;
+        transform: scale(1.1);
+    }
+
+    .button-option-group label:hover {
+        background-color: #FD8087;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Event listeners for validation
+        document.getElementById('vehNo').addEventListener('blur', validateVehNoInput);
+        document.getElementById('makemodel').addEventListener('change', validateMakeModelInput);
+        document.getElementById('registeredyear').addEventListener('change', validateRegisteredYearInput);
+        document.querySelectorAll('input[name="carscheme-options"]').forEach(radio => radio.addEventListener('change', validateCarSchemeInput));
+        document.querySelectorAll('input[name="NCD-options"]').forEach(radio => radio.addEventListener('change', validateNCDInput));
+        document.querySelectorAll('input[name="DL-options"]').forEach(radio => radio.addEventListener('change', validateDLInput));
+        document.querySelectorAll('input[name="Claims-options"]').forEach(radio => radio.addEventListener('change', validateClaimsInput));
+
+        document.getElementById('carInsuranceForm').addEventListener('submit', function (event) {
+            if (!validateForm()) {
+                event.preventDefault();
+            }
+        });
+        const select = document.getElementById('registeredyear');
+        const currentYear = new Date().getFullYear();
+        const startYear = currentYear - 20;
+
+        for (let year = currentYear; year >= startYear; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            select.appendChild(option);
+        }
+
+    });
+
+    function validateVehNoInput() {
+        const vehNo = document.getElementById('vehNo').value;
+        const vehNoError = document.getElementById('vehNoError');
+        const pattern = /^[A-Za-z0-9]{1,10}$/;
+
+        if (!pattern.test(vehNo)) {
+            vehNoError.textContent = 'Vehicle number should be alphanumeric and 1-10 characters long.';
+        } else {
+            vehNoError.textContent = '';
+        }
+    }
+
+    function validateMakeModelInput() {
+        const select = document.getElementById('makemodel');
+        const errorElement = document.getElementById('makemodelError');
+
+        if (select.value === '') {
+            errorElement.textContent = 'Please select a make and model.';
+            return false;
+        } else {
+            errorElement.textContent = '';
+            return true;
+        }
+    }
+
+    function validateRegisteredYearInput() {
+        const select = document.getElementById('registeredyear');
+        const errorElement = document.getElementById('registeredyearError');
+
+        if (select.value === '') {
+            errorElement.textContent = 'Please select a year of registration.';
+            return false;
+        } else {
+            errorElement.textContent = '';
+            return true;
+        }
+    }
+
+    function validateCarSchemeInput() {
+        const carSchemeSelected = document.querySelector('input[name="carscheme-options"]:checked');
+        const carSchemeError = document.getElementById('carschemeError');
+
+        if (!carSchemeSelected) {
+            carSchemeError.textContent = 'Please select a car scheme.';
+        } else {
+            carSchemeError.textContent = '';
+        }
+    }
+
+    function validateNCDInput() {
+        const ncdSelected = document.querySelector('input[name="NCD-options"]:checked');
+        const ncdError = document.getElementById('NCDError');
+
+        if (!ncdSelected) {
+            ncdError.textContent = 'Please select a no claim discount percentage.';
+        } else {
+            ncdError.textContent = '';
+        }
+    }
+
+    function validateDLInput() {
+        const dlSelected = document.querySelector('input[name="DL-options"]:checked');
+        const dlError = document.getElementById('DLError');
+
+        if (!dlSelected) {
+            dlError.textContent = 'Please select your years of valid driving license.';
+        } else {
+            dlError.textContent = '';
+        }
+    }
+
+    function validateClaimsInput() {
+        const claimsSelected = document.querySelector('input[name="Claims-options"]:checked');
+        const claimsError = document.getElementById('ClaimsError');
+
+        if (!claimsSelected) {
+            claimsError.textContent = 'Please select the number of claims in the last 3 years.';
+            return false;
+        } else if (claimsSelected.value === 'Unacceptable') {
+            claimsError.textContent = 'Claims >= 3, contact Singlife for alternative options';
+            return false;
+        } else {
+            claimsError.textContent = '';
+            return true;
+        }
+    }
+
+    function validateForm() {
+        validateVehNoInput();
+        validateMakeModelInput();
+        validateRegisteredYearInput();
+        validateCarSchemeInput();
+        validateNCDInput();
+        validateDLInput();
+        validateClaimsInput();
+
+        const vehNoError = document.getElementById('vehNoError').textContent;
+        const makeModelError = document.getElementById('makemodelError').textContent;
+        const registeredYearError = document.getElementById('registeredyearError').textContent;
+        const carSchemeError = document.getElementById('carschemeError').textContent;
+        const ncdError = document.getElementById('NCDError').textContent;
+        const dlError = document.getElementById('DLError').textContent;
+        const claimsError = document.getElementById('ClaimsError').textContent;
+
+        return !(vehNoError || makeModelError || registeredYearError || carSchemeError || ncdError || dlError || claimsError);
+    }
+</script>

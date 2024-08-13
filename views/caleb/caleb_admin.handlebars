@@ -1,0 +1,242 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">- Video & Voucher Management -</h6>
+            <h1 class="mb-5">Video & Voucher</h1>
+        </div>
+    </div>
+</div>
+<div class="col-10" style="padding-left: 100px; margin: 0 auto;">
+    <button class="btn btn-primary"
+        style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; margin-right: 10px;"
+        onclick="calebtab('Video')">Video</button>
+    <button class="btn btn-primary"
+        style="background-color: transparent; color: black; border-radius: 20px; border: 2px solid #000; width: auto;"
+        onclick="calebtab('Voucher')">Voucher</button><br><br>
+
+    <!-- Video Management -->
+    <div id="Video" class="caleb">
+        <h2>Manage Videos</h2>
+        <!-- Form to create or update a video -->
+        <form id="video-form">
+            <input type="hidden" id="video-id" name="id">
+            <div class="form-group">
+                <label for="title">Title:</label><br>
+                <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label><br>
+                <textarea id="description" name="description" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="url">Video URL:</label><br>
+                <input type="text" id="url" name="url" class="form-control" required>
+            </div><br>
+            <button type="submit" class="btn btn-primary w-100 py-3">Submit</button>
+        </form><br><br>
+
+        <!-- Video List -->
+        <h3>All Videos</h3>
+        <ul>
+            {{#each videos}}
+            <li>
+                <strong>{{title}}</strong> - {{description}}
+                <button class="btn btn-sm btn-warning" onclick="editVideo('{{id}}')">Edit</button>
+                <form action="/video/{{id}}?_method=DELETE" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <!-- Voucher Management -->
+    <div id="Voucher" class="caleb" style="display: none;">
+        <h2>Manage Vouchers</h2>
+        <!-- Form to create or update a voucher -->
+        <form id="voucher-form">
+            <input type="hidden" id="voucher-id" name="id">
+            <div class="form-group">
+                <label for="voucName">Voucher Name:</label><br>
+                <input type="text" id="voucName" name="voucName" class="form-control" required>
+            </div><br>
+            <div class="form-group">
+                <label for="voucDesc">Description:</label><br>
+                <textarea id="voucDesc" name="voucDesc" class="form-control" required></textarea>
+            </div><br>
+            <div class="form-group">
+                <label for="discount">Discount (%):</label><br>
+                <input type="number" id="discount" name="discount" class="form-control" required>
+            </div><br>
+            <div class="form-group">
+                <label for="expiryDate">Expiry Date:</label><br>
+                <input type="date" id="expiryDate" name="expiryDate" class="form-control" required>
+            </div>
+            <div id="voucher-error" class="text-danger" style="display:none; margin-top: 10px;"></div>
+            <br>
+            <button type="submit" class="btn btn-primary w-100 py-3">Submit</button>
+        </form><br><br>
+
+        <!-- Voucher List -->
+        <h3>All Vouchers</h3>
+        <ul>
+            {{#each vouchers}}
+            <li>
+                <strong>{{voucName}}</strong> - {{voucDesc}}
+                <button class="btn btn-sm btn-warning" onclick="editVoucher('{{id}}')">Edit</button>
+                <form action="/voucher/{{id}}?_method=DELETE" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+<script>
+    // Function to toggle between Video and Voucher tabs
+    function calebtab(department) {
+        const tabs = document.getElementsByClassName("caleb");
+        for (let tab of tabs) {
+            tab.style.display = "none";
+        }
+        document.getElementById(department).style.display = "block";
+    }
+    document.getElementById('expiryDate').addEventListener('blur', function (event) {
+        const expiryDate = new Date(event.target.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set time to 00:00 to compare only the date
+
+        const errorElement = document.getElementById('voucher-error');
+
+        // Validate expiry date
+        if (expiryDate < today) {
+            errorElement.textContent = "Expiry date cannot be before today's date.";
+            errorElement.style.display = "block";
+        } else {
+            errorElement.style.display = "none"; // Hide the error message if the date is valid
+        }
+    });
+
+    // Function to handle form submission for video
+    document.getElementById('video-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const form = event.target;
+        const expiryDate = new Date(form.expiryDate.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set time to 00:00 to compare only the date
+
+        const errorElement = document.getElementById('voucher-error');
+
+        // Validate expiry date
+        if (expiryDate < today) {
+            errorElement.textContent = "Expiry date cannot be before today's date.";
+            errorElement.style.display = "block";
+            return; // Stop form submission if the date is invalid
+        } else {
+            errorElement.style.display = "none"; // Hide the error message if the date is valid
+        }
+        const videoId = document.getElementById('video-id').value;
+        const actionUrl = videoId ? `/video/${videoId}` : '/createvideo';
+        const method = videoId ? 'PUT' : 'POST';
+
+        fetch(actionUrl, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: form.title.value,
+                description: form.description.value,
+                url: form.url.value
+            })
+        })
+            .then(response => {
+                return response.text(); // Read response as text
+            })
+            .then(text => {
+                try {
+                    const data = JSON.parse(text); // Try parsing the text as JSON
+                    if (data && data.message) {
+                        console.error('Error:', data.message); // Handle specific error messages
+                    } else {
+                        console.log('Success:', data);
+                        location.reload(); // Refresh the page to reflect changes
+                    }
+                } catch (error) {
+                    console.error('Unexpected response format:', text);
+                }
+            })
+            .catch(error => console.error('Fetch error:', error));
+    });
+
+    // Function to populate the form for editing a video
+    function editVideo(id) {
+        fetch(`/video/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('title').value = data.title;
+                document.getElementById('description').value = data.description;
+                document.getElementById('url').value = data.url;
+                document.getElementById('video-id').value = data.id; // Set the ID for update
+            })
+            .catch(error => console.error('Error fetching video data:', error));
+    }
+
+    // Function to handle form submission for voucher
+    document.getElementById('voucher-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const form = event.target;
+        const voucherId = document.getElementById('voucher-id').value;
+        const actionUrl = voucherId ? `/voucher/${voucherId}` : '/createvoucher';
+        const method = voucherId ? 'PUT' : 'POST';
+
+        fetch(actionUrl, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                voucName: form.voucName.value,
+                voucDesc: form.voucDesc.value,
+                discount: form.discount.value,
+                expiryDate: form.expiryDate.value
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Success');
+                    // Optionally handle success (e.g., refresh the list or show a success message)
+                    location.reload(); // Refresh the page to reflect changes
+                } else {
+                    console.error('Error:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Fetch error:', error));
+    });
+
+    // Function to populate the form for editing a voucher
+    function editVoucher(id) {
+        fetch(`/voucher/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('voucName').value = data.voucName;
+                document.getElementById('voucDesc').value = data.voucDesc;
+                document.getElementById('discount').value = data.discount;
+                document.getElementById('expiryDate').value = data.expiryDate;
+                document.getElementById('voucher-id').value = data.id; // Set the ID for update
+            })
+            .catch(error => console.error('Error fetching voucher data:', error));
+    }
+</script>

@@ -1,0 +1,59 @@
+<title>My Bookings</title>
+<style>
+    .booking-card {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-card h2 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .booking-card p {
+        margin: 5px 0;
+    }
+
+    .cancel-button {
+        background-color: #ff4d4d;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    .cancel-button:hover {
+        background-color: #ff1a1a;
+    }
+</style>
+
+
+<body>
+    <div class="container">
+        <h1>My Bookings</h1>
+        {{#if bookings.length}}
+        {{#each bookings}}
+        <div class="booking-card">
+            <h2>{{workshop.workshop_title}}</h2>
+            <p>Organizer: {{workshop.workshop_organizer}}</p>
+            <p>Venue: {{workshop.workshop_venue}}</p>
+            <p>Date: {{workshop.workshop_date}}</p>
+            <p>Time: {{workshop.workshop_start_time}} - {{workshop.workshop_end_time}}</p>
+            <p>Description: {{workshop.workshop_description}}</p>
+            <!-- Cancel Button -->
+            <form action="/cancel_booking/{{user_workshop_id}}" method="POST">
+                <button type="submit" class="cancel-button">Cancel Booking</button>
+            </form>
+        </div>
+        {{/each}}
+        {{else}}
+        <p>You haven't booked any workshops yet.</p>
+        {{/if}}
+    </div>
+</body>
